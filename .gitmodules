@@ -1,6 +1,3 @@
 [submodule "snowcoreBlog.Backend"]
 	path = snowcoreBlog.Backend
 	url = https://github.com/SnowPowerCore/snowcoreBlog.Backend
-[submodule "snowcoreBlog.Universal"]
-	path = snowcoreBlog.Universal
-	url = https://github.com/SnowPowerCore/snowcoreBlog.Universal
