@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>7a6ab41e-b94e-4216-8d1f-3472783f4e34</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.0-preview.7.24251.11" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="8.0.0-preview.7.24251.11" />
+    <PackageReference Include="Aspire.Hosting.Redis" Version="8.0.0-preview.7.24251.11" />
+    <PackageReference Include="Fody" Version="6.8.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="**/FodyWeavers.*" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Backend\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Frontend\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Console\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\UsersManagement\snowcoreBlog.Backend.UsersManagement.csproj" />
+    <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
+  </ItemGroup>
+
+</Project>
