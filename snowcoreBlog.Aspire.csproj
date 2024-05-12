@@ -26,17 +26,16 @@
 
   <PropertyGroup>
     <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Backend\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Frontend\**</DefaultItemExcludes>
     <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Console\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference
-      Include="snowcoreBlog.Backend\BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj" />
-    <ProjectReference
-      Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
-    <ProjectReference
-      Include="snowcoreBlog.Backend\BusinessServices\UsersManagement\snowcoreBlog.Backend.UsersManagement.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\UsersManagement\snowcoreBlog.Backend.UsersManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
+    <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
   </ItemGroup>
 
 </Project>
