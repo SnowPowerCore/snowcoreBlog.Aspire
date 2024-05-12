@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.UsersM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Console.App", "snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj", "{FE747577-346E-4C1D-AD42-F7F83612891A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Host", "snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj", "{2A8C560C-2B44-49FF-A68D-C2DE3E4DE0D3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

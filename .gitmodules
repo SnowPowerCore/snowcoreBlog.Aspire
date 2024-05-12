@@ -4,6 +4,3 @@
 [submodule "snowcoreBlog.Console"]
 	path = snowcoreBlog.Console
 	url = https://github.com/SnowPowerCore/snowcoreBlog.Console
-[submodule "snowcoreBlog.Frontend"]
-	path = snowcoreBlog.Frontend
-	url = https://github.com/SnowPowerCore/snowcoreBlog.Frontend
