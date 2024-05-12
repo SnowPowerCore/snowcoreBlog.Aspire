@@ -18,6 +18,9 @@ builder.AddProject<Projects.snowcoreBlog_Backend_Articles>("backend_articles")
     .WithReference(cache)
     .WithReference(db);
 
+builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend_apphost")
+    .WithReference(cache);
+
 builder.AddProject<Projects.snowcoreBlog_Console_App>("console_appdefault");
 
 await builder.Build().RunAsync();
