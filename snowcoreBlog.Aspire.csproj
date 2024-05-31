@@ -6,12 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
-    <UserSecretsId>7a6ab41e-b94e-4216-8d1f-3472783f4e34</UserSecretsId>
+    <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="8.0.1" />
     <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="8.0.1" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="8.0.1" />
     <PackageReference Include="Aspire.Hosting.Redis" Version="8.0.1" />
     <PackageReference Include="Fody" Version="6.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,11 +32,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\UsersManagement\snowcoreBlog.Backend.UsersManagement.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\AuthorsManagement\snowcoreBlog.Backend.AuthorsManagement.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
   </ItemGroup>
 
 </Project>

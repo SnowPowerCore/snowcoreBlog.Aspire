@@ -1,26 +1,39 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+var messagingPassword = builder.AddParameter("messaging-password", true);
+
 var cache = builder.AddRedis("cache")
-    .WithImage("ghcr.io/microsoft/garnet")
+    .WithImageRegistry("ghcr.io")
+    .WithImage("microsoft/garnet")
     .WithImageTag("latest");
 
-var db = builder.AddPostgres("db");
+var rabbitmq = builder.AddRabbitMQ("rabbitmq", password: messagingPassword)
+    .WithManagementPlugin()
+    .WithImage("masstransit/rabbitmq");
 
-builder.AddProject<Projects.snowcoreBlog_Backend_AdminsManagement>("backend-adminsmanagement")
-    .WithReference(cache)
-    .WithReference(db);
+var dbSnowCoreBlogEntities = builder.AddPostgres("db-snowcore-blog-entities");
+var dbIamEntities = builder.AddPostgres("db-iam-entities");
 
-builder.AddProject<Projects.snowcoreBlog_Backend_UsersManagement>("backend-usersmanagement")
+builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
-    .WithReference(db);
+    .WithReference(rabbitmq)
+    .WithReference(dbIamEntities);
+
+builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
+    .WithReference(cache)
+    .WithReference(dbSnowCoreBlogEntities);
+
+builder.AddProject<Projects.snowcoreBlog_Backend_ReadersManagement>("backend-readersmanagement")
+    .WithReference(cache)
+    .WithReference(rabbitmq)
+    .WithReference(dbSnowCoreBlogEntities);
 
 builder.AddProject<Projects.snowcoreBlog_Backend_Articles>("backend-articles")
-    .WithReference(cache)
-    .WithReference(db);
-
-builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
     .WithReference(cache);
 
-builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
+// builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
+//     .WithReference(cache);
+
+// builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
 await builder.Build().RunAsync();
