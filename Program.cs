@@ -1,13 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var messagingPassword = builder.AddParameter("messaging-password", true);
-
 var cache = builder.AddRedis("cache")
     .WithImageRegistry("ghcr.io")
     .WithImage("microsoft/garnet")
     .WithImageTag("latest");
 
-var rabbitmq = builder.AddRabbitMQ("rabbitmq", password: messagingPassword)
+var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithManagementPlugin()
     .WithImage("masstransit/rabbitmq");
 
