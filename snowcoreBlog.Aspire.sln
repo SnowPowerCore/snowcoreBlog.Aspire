@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Reader
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM", "snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj", "{412285DA-AABC-4044-9ACC-B903DA7E66EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Infrastructure", "snowcoreBlog.Backend\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj", "{02E8481A-29CD-4D07-ABF6-A183EBC91B53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.PublicApi", "snowcoreBlog.Backend\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj", "{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{412285DA-AABC-4044-9ACC-B903DA7E66EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{412285DA-AABC-4044-9ACC-B903DA7E66EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{412285DA-AABC-4044-9ACC-B903DA7E66EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02E8481A-29CD-4D07-ABF6-A183EBC91B53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02E8481A-29CD-4D07-ABF6-A183EBC91B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02E8481A-29CD-4D07-ABF6-A183EBC91B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02E8481A-29CD-4D07-ABF6-A183EBC91B53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
