@@ -1,33 +1,50 @@
+using snowcoreBlog.Aspire.Extensions;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache")
     .WithImageRegistry("ghcr.io")
     .WithImage("microsoft/garnet")
-    .WithImageTag("latest");
+    .WithImageTag("latest")
+    .WithHealthCheck();
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithManagementPlugin()
-    .WithImage("masstransit/rabbitmq");
+    .WithImage("masstransit/rabbitmq")
+    .WithHealthCheck();
 
-var dbSnowCoreBlogEntities = builder.AddPostgres("db-snowcore-blog-entities");
-var dbIamEntities = builder.AddPostgres("db-iam-entities");
+var dbSnowCoreBlogEntities = builder.AddPostgres("db-snowcore-blog-entities")
+    .WithHealthCheck();
+var dbIamEntities = builder.AddPostgres("db-iam-entities")
+    .WithHealthCheck();
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
     .WithReference(rabbitmq)
-    .WithReference(dbIamEntities);
+    .WithReference(dbIamEntities)
+    .WaitFor(cache)
+    .WaitFor(dbIamEntities)
+    .WaitFor(rabbitmq);
 
 builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
     .WithReference(cache)
-    .WithReference(dbSnowCoreBlogEntities);
+    .WithReference(dbSnowCoreBlogEntities)
+    .WaitFor(cache)
+    .WaitFor(dbSnowCoreBlogEntities)
+    .WaitFor(rabbitmq);
 
 builder.AddProject<Projects.snowcoreBlog_Backend_ReadersManagement>("backend-readersmanagement")
     .WithReference(cache)
     .WithReference(rabbitmq)
-    .WithReference(dbSnowCoreBlogEntities);
+    .WithReference(dbSnowCoreBlogEntities)
+    .WaitFor(cache)
+    .WaitFor(dbSnowCoreBlogEntities)
+    .WaitFor(rabbitmq);
 
 builder.AddProject<Projects.snowcoreBlog_Backend_Articles>("backend-articles")
-    .WithReference(cache);
+    .WithReference(cache)
+    .WaitFor(cache)
+    .WaitFor(rabbitmq);
 
 // builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
 //     .WithReference(cache);
