@@ -6,7 +6,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
-        "ASPIRE_ALLOW_UNSECURED_TRANSPORT": true,
+        "ASPIRE_ALLOW_UNSECURED_TRANSPORT": "true",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DOTNET_DASHBOARD_OTLP_ENDPOINT_URL": "http://localhost:19130",
         "DOTNET_ENVIRONMENT": "Development",
