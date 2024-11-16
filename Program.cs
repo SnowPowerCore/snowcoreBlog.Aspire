@@ -1,22 +1,18 @@
-using snowcoreBlog.Aspire.Extensions;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache")
     .WithImageRegistry("ghcr.io")
     .WithImage("microsoft/garnet")
-    .WithImageTag("latest")
-    .WithHealthCheck();
+    .WithImageTag("latest");
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithManagementPlugin()
-    .WithImage("masstransit/rabbitmq")
-    .WithHealthCheck();
+    .WithImage("masstransit/rabbitmq");
 
 var dbSnowCoreBlogEntities = builder.AddPostgres("db-snowcore-blog-entities")
-    .WithHealthCheck();
+    .WithPgAdmin();
 var dbIamEntities = builder.AddPostgres("db-iam-entities")
-    .WithHealthCheck();
+    .WithPgAdmin();
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
