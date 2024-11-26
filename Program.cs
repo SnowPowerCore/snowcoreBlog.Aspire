@@ -22,6 +22,12 @@ builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WaitFor(dbIamEntities)
     .WaitFor(rabbitmq);
 
+builder.AddProject<Projects.snowcoreBlog_Backend_Email>("backend-email")
+    .WithReference(cache)
+    .WithReference(rabbitmq)
+    .WaitFor(cache)
+    .WaitFor(rabbitmq);
+
 builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
     .WithReference(cache)
     .WithReference(dbSnowCoreBlogEntities)
