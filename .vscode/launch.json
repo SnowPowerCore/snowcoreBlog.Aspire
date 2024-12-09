@@ -1,7 +1,12 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": []
+    "configurations": [
+        {
+            "name": "C#: snowcoreBlog.Aspire [https]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}\\snowcoreBlog.Aspire.csproj",
+            "launchConfigurationId": "TargetFramework=;https"
+        }
+    ]
 }

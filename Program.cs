@@ -8,15 +8,12 @@ var cache = builder.AddRedis("cache")
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithManagementPlugin()
-    .WithImage("masstransit/rabbitmq")
-    .WithHttpsEndpoint(targetPort: 61633);
+    .WithImage("masstransit/rabbitmq");
 
 var dbSnowCoreBlogEntities = builder.AddPostgres("db-snowcore-blog-entities")
-    .WithPgAdmin()
-    .WithHttpsEndpoint(targetPort: 61636);
+    .WithPgAdmin();
 var dbIamEntities = builder.AddPostgres("db-iam-entities")
-    .WithPgAdmin()
-    .WithHttpsEndpoint(targetPort: 61637);
+    .WithPgAdmin();
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
