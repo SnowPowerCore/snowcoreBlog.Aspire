@@ -3,7 +3,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 var cache = builder.AddRedis("cache")
     .WithImageRegistry("ghcr.io")
     .WithImage("microsoft/garnet")
-    .WithImageTag("latest");
+    .WithImageTag("latest")
+    .WithRedisInsight();
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithManagementPlugin()
@@ -28,14 +29,14 @@ builder.AddProject<Projects.snowcoreBlog_Backend_Email>("backend-email")
     .WaitFor(cache)
     .WaitFor(rabbitmq);
 
-builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
+var backendAuthorsManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
     .WithReference(cache)
     .WithReference(dbSnowCoreBlogEntities)
     .WaitFor(cache)
     .WaitFor(dbSnowCoreBlogEntities)
     .WaitFor(rabbitmq);
 
-builder.AddProject<Projects.snowcoreBlog_Backend_ReadersManagement>("backend-readersmanagement")
+var backendReadersManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_ReadersManagement>("backend-readersmanagement")
     .WithReference(cache)
     .WithReference(rabbitmq)
     .WithReference(dbSnowCoreBlogEntities)
@@ -43,10 +44,17 @@ builder.AddProject<Projects.snowcoreBlog_Backend_ReadersManagement>("backend-rea
     .WaitFor(dbSnowCoreBlogEntities)
     .WaitFor(rabbitmq);
 
-builder.AddProject<Projects.snowcoreBlog_Backend_Articles>("backend-articles")
+var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Articles>("backend-articles")
     .WithReference(cache)
     .WaitFor(cache)
     .WaitFor(rabbitmq);
+
+builder.AddYarp("ingress")
+    .WithHttpEndpoint(port: 8001)
+    .WithReference(backendAuthorsManagementProject)
+    .WithReference(backendReadersManagementProject)
+    .WithReference(backendArticlesProject)
+    .LoadFromConfiguration("ReverseProxy");
 
 // builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
 //     .WithReference(cache);
