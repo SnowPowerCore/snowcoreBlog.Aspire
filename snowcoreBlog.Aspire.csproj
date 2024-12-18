@@ -35,14 +35,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\AuthorsManagement\snowcoreBlog.Backend.AuthorsManagement.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\AuthorsManagement\snowcoreBlog.Backend.AuthorsManagement.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
+    <ProjectReference
+      Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
   </ItemGroup>
 
 </Project>
