@@ -51,16 +51,20 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq);
 
+builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
+    .WaitFor(backendAuthorsManagementProject)
+    .WaitFor(backendReadersManagementProject)
+    .WaitFor(backendArticlesProject)
+    .WithReference(cache)
+    .WaitFor(cache);
+
+// builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
+
 builder.AddYarp("ingress")
     .WithReference(backendAuthorsManagementProject)
     .WithReference(backendReadersManagementProject)
     .WithReference(backendArticlesProject)
     .LoadFromConfiguration("ReverseProxy")
     .WithHttpsEndpoint(targetPort: 443);
-
-// builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
-//     .WithReference(cache);
-
-// builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
 await builder.Build().RunAsync();
