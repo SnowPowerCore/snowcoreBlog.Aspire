@@ -4,7 +4,13 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "snowcoreBlog.Aspire", "snowcoreBlog.Aspire.csproj", "{5EEA96E0-5E88-4AA7-B532-3F441AD99A69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Core", "snowcoreBlog.Backend\Shared\Core\snowcoreBlog.Backend.Core.csproj", "{935C4A89-C4C4-4194-8408-63D336CA9B5D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Infrastructure", "snowcoreBlog.Backend\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj", "{02E8481A-29CD-4D07-ABF6-A183EBC91B53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM", "snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj", "{412285DA-AABC-4044-9ACC-B903DA7E66EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Email", "snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj", "{7313A25D-5016-41A9-A176-CAFFC2285B9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Articles", "snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj", "{8BD0AD12-EF12-4AD1-B989-AED874773548}"
 EndProject
@@ -12,13 +18,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Author
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.ReadersManagement", "snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj", "{90103197-919E-42B3-AA69-5C121B10A986}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Console.App", "snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj", "{FE747577-346E-4C1D-AD42-F7F83612891A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Core", "snowcoreBlog.Frontend\snowcoreBlog.Frontend.Core\snowcoreBlog.Frontend.Core.csproj", "{37D06341-5864-4EF4-BC4A-1DB7298AE364}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Infrastructure", "snowcoreBlog.Frontend\snowcoreBlog.Frontend.Infrastructure\snowcoreBlog.Frontend.Infrastructure.csproj", "{13F7BD05-2B2A-46B3-8F95-CB5008C7E27D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.SharedComponents", "snowcoreBlog.Frontend\Modules\SharedComponents\snowcoreBlog.Frontend.SharedComponents.csproj", "{EFE5943E-2B42-44B6-B3A8-BE9B04E42571}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.ReadersManagement", "snowcoreBlog.Frontend\Modules\ReadersManagement\snowcoreBlog.Frontend.ReadersManagement.csproj", "{6CF94987-C563-4223-939B-7FBDD029AC77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Host", "snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj", "{13DC59E9-F03E-4F73-90A9-36D74C42DBF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.IAM", "snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj", "{412285DA-AABC-4044-9ACC-B903DA7E66EF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Email", "snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj", "{7313A25D-5016-41A9-A176-CAFFC2285B9E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Console.App", "snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj", "{FE747577-346E-4C1D-AD42-F7F83612891A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.PublicApi", "snowcoreBlog.Backend\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj", "{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}"
 EndProject
@@ -68,11 +78,28 @@ Global
 		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CF94987-C563-4223-939B-7FBDD029AC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CF94987-C563-4223-939B-7FBDD029AC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CF94987-C563-4223-939B-7FBDD029AC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CF94987-C563-4223-939B-7FBDD029AC77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFE5943E-2B42-44B6-B3A8-BE9B04E42571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFE5943E-2B42-44B6-B3A8-BE9B04E42571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFE5943E-2B42-44B6-B3A8-BE9B04E42571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFE5943E-2B42-44B6-B3A8-BE9B04E42571}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13F7BD05-2B2A-46B3-8F95-CB5008C7E27D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13F7BD05-2B2A-46B3-8F95-CB5008C7E27D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13F7BD05-2B2A-46B3-8F95-CB5008C7E27D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13F7BD05-2B2A-46B3-8F95-CB5008C7E27D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37D06341-5864-4EF4-BC4A-1DB7298AE364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37D06341-5864-4EF4-BC4A-1DB7298AE364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37D06341-5864-4EF4-BC4A-1DB7298AE364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37D06341-5864-4EF4-BC4A-1DB7298AE364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {68FAA62C-C2BA-4F63-9295-8F5B68307CD9}
 	EndGlobalSection
 EndGlobal
