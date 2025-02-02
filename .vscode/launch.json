@@ -6,7 +6,46 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}\\snowcoreBlog.Aspire.csproj",
-            "launchConfigurationId": "TargetFramework=;https"
+            "launchConfigurationId": "TargetFramework=;https",
+        },
+        {
+            "name": "C#: snowcoreBlog.Frontend.Host",
+            "type": "blazorwasm",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\snowcoreBlog.Frontend\\Host",
+            "url": "https://localhost:7288"
+        },
+        {
+            "name": "Watch: snowcoreBlog.Frontend.Host",
+            "type": "coreclr",
+            "request": "launch",
+            "cwd": "${workspaceFolder}\\snowcoreBlog.Frontend\\Host",
+            "program": "dotnet",
+            "args": [
+                "watch",
+                "--project",
+                ".",
+                "--verbose"
+            ],
+            "preLaunchTask": "build"
+        },
+        {
+            "name": "Attach: snowcoreBlog.Frontend.Host",
+            "type": "blazorwasm",
+            "request": "attach",
+            "cwd": "${workspaceFolder}\\snowcoreBlog.Frontend\\Host",
+            "browser": "edge",
+            "url": "https://localhost:7288",
+            "timeout": 45000
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Start with Hot Reload: snowcoreBlog.Frontend.Host",
+            "configurations": [
+                "Watch: snowcoreBlog.Frontend.Host",
+                "Attach: snowcoreBlog.Frontend.Host"
+            ]
         }
     ]
 }
