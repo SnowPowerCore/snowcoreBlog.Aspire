@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Share
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.ReadersManagement", "snowcoreBlog.Frontend\Modules\ReadersManagement\snowcoreBlog.Frontend.ReadersManagement.csproj", "{6CF94987-C563-4223-939B-7FBDD029AC77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Client", "snowcoreBlog.Frontend\snowcoreBlog.Frontend.Client\snowcoreBlog.Frontend.Client.csproj", "{612F7CB7-BF5B-40EB-AB11-1A895A2233B6}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Host", "snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj", "{13DC59E9-F03E-4F73-90A9-36D74C42DBF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Console.App", "snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj", "{FE747577-346E-4C1D-AD42-F7F83612891A}"
@@ -98,6 +100,10 @@ Global
 		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{935C4A89-C4C4-4194-8408-63D336CA9B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{612F7CB7-BF5B-40EB-AB11-1A895A2233B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{612F7CB7-BF5B-40EB-AB11-1A895A2233B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{612F7CB7-BF5B-40EB-AB11-1A895A2233B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{612F7CB7-BF5B-40EB-AB11-1A895A2233B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
