@@ -65,6 +65,10 @@ builder.AddYarp("ingress")
     .WithReference(backendReadersManagementProject)
     .WithReference(backendArticlesProject)
     .LoadFromConfiguration("ReverseProxy")
+    .WithAuthPolicies(
+        ("regularReader", policy => policy
+            .RequireAuthenticatedUser()
+            .RequireClaim("readerAccount", allowedValues: true.ToString())))
     .WithHttpsEndpoint(targetPort: 443);
 
 await builder.Build().RunAsync();
