@@ -64,6 +64,7 @@ builder.AddYarp("ingress")
     .WithReference(backendAuthorsManagementProject)
     .WithReference(backendReadersManagementProject)
     .WithReference(backendArticlesProject)
+    .WithReference(rabbitmq)
     .LoadFromConfiguration("ReverseProxy")
     .WithAuthPolicies(
         ("regularReader", policy => policy
