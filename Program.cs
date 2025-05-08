@@ -10,18 +10,21 @@ var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithManagementPlugin()
     .WithImage("masstransit/rabbitmq");
 
-var dbSnowCoreBlogEntities = builder.AddPostgres("db-snowcore-blog-entities")
-    .WithPgAdmin();
-var dbIamEntities = builder.AddPostgres("db-iam-entities")
-    .WithPgAdmin();
+var postgres = builder
+    .AddPostgres("postgres")
+    .WithDataVolume(isReadOnly: false)
+    .WithPgWeb();
+
+var dbSnowCoreBlogEntitiesDb = postgres.AddDatabase("db-snowcore-blog-entities");
+var dbIamEntitiesDb = postgres.AddDatabase("db-iam-entities");
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
     .WaitFor(cache)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
-    .WithReference(dbIamEntities)
-    .WaitFor(dbIamEntities);
+    .WithReference(dbIamEntitiesDb)
+    .WaitFor(dbIamEntitiesDb);
 
 builder.AddProject<Projects.snowcoreBlog_Backend_Email>("backend-email")
     .WithReference(cache)
@@ -34,16 +37,16 @@ var backendAuthorsManagementProject = builder.AddProject<Projects.snowcoreBlog_B
     .WaitFor(cache)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
-    .WithReference(dbSnowCoreBlogEntities)
-    .WaitFor(dbSnowCoreBlogEntities);
+    .WithReference(dbSnowCoreBlogEntitiesDb)
+    .WaitFor(dbSnowCoreBlogEntitiesDb);
 
 var backendReadersManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_ReadersManagement>("backend-readersmanagement")
     .WithReference(cache)
     .WaitFor(cache)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
-    .WithReference(dbSnowCoreBlogEntities)
-    .WaitFor(dbSnowCoreBlogEntities);
+    .WithReference(dbSnowCoreBlogEntitiesDb)
+    .WaitFor(dbSnowCoreBlogEntitiesDb);
 
 var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Articles>("backend-articles")
     .WithReference(cache)
