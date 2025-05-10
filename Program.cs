@@ -1,9 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 var cache = builder.AddRedis("cache")
-    .WithImageRegistry("ghcr.io")
-    .WithImage("microsoft/garnet")
-    .WithImageTag("latest")
     .WithRedisInsight();
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
