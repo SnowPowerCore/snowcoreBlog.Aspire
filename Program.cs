@@ -69,7 +69,7 @@ builder.AddYarp("ingress")
     .WithAuthPolicies(
         ("regularReader", policy => policy
             .RequireAuthenticatedUser()
-            .RequireClaim("readerAccount", allowedValues: true.ToString())))
+            .RequireClaim("readerAccount", allowedValues: true.ToString().ToLower())))
     .WithHttpsEndpoint(targetPort: 443);
 
 await builder.Build().RunAsync();
