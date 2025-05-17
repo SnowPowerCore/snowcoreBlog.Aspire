@@ -60,6 +60,8 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
 
 // builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
+builder.Addntfy("ntfy", 4010);
+
 builder.AddYarp("ingress")
     .WithReference(backendAuthorsManagementProject)
     .WithReference(backendReadersManagementProject)

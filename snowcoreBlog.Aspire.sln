@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "snowcoreBlog.Aspire", "snowcoreBlog.Aspire.csproj", "{5EEA96E0-5E88-4AA7-B532-3F441AD99A69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.AspireYarpGateway", "snowcoreBlog.Backend\Shared\Services\AspireYarpGateway\snowcoreBlog.Backend.AspireYarpGateway.csproj", "{32D0F5AE-D8D7-416F-84B4-63F43EA9EAD9}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Core", "snowcoreBlog.Backend\Shared\Core\snowcoreBlog.Backend.Core.csproj", "{935C4A89-C4C4-4194-8408-63D336CA9B5D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.Infrastructure", "snowcoreBlog.Backend\Shared\Infrastructure\snowcoreBlog.Backend.Infrastructure.csproj", "{02E8481A-29CD-4D07-ABF6-A183EBC91B53}"
@@ -31,15 +33,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.Host", "snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj", "{13DC59E9-F03E-4F73-90A9-36D74C42DBF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Console.App", "snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj", "{FE747577-346E-4C1D-AD42-F7F83612891A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.PublicApi", "snowcoreBlog.Backend\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj", "{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.WasmForDebugging", "snowcoreBlog.Frontend\snowcoreBlog.Frontend.WasmForDebugging\snowcoreBlog.Frontend.WasmForDebugging.csproj", "{C7C2A1FC-9EAC-456D-B9F7-45FA41F71F5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Frontend.ClientShared", "snowcoreBlog.Frontend\snowcoreBlog.Frontend.ClientShared\snowcoreBlog.Frontend.ClientShared.csproj", "{E6734BE5-411C-40DC-AA48-5C1FB5E947E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Backend.AspireYarpGateway", "snowcoreBlog.Backend\Shared\Services\AspireYarpGateway\snowcoreBlog.Backend.AspireYarpGateway.csproj", "{32D0F5AE-D8D7-416F-84B4-63F43EA9EAD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.Console.App", "snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj", "{FE747577-346E-4C1D-AD42-F7F83612891A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "snowcoreBlog.PublicApi", "snowcoreBlog.Backend\snowcoreBlog.Universal\PublicApi\snowcoreBlog.PublicApi.csproj", "{DA841F10-26BC-4858-9FB6-14E1D25EBF0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
