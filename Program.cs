@@ -29,6 +29,12 @@ builder.AddProject<Projects.snowcoreBlog_Backend_Email>("backend-email")
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq);
 
+builder.AddProject<Projects.snowcoreBlog_Backend_Push>("backend-push")
+    .WithReference(cache)
+    .WaitFor(cache)
+    .WithReference(rabbitmq)
+    .WaitFor(rabbitmq);
+
 var backendAuthorsManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
     .WithReference(cache)
     .WaitFor(cache)
