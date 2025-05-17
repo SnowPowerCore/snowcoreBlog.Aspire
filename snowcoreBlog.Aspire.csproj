@@ -41,6 +41,7 @@
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Push\snowcoreBlog.Backend.Push.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
   </ItemGroup>
