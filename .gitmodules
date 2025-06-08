@@ -1,9 +1,9 @@
 [submodule "snowcoreBlog.Backend"]
 	path = snowcoreBlog.Backend
-	url = https://github.com/SnowPowerCore/snowcoreBlog.Backend
+	url = https://github.com/SnowPowerCore/snowcoreBlog.Backend.git
 [submodule "snowcoreBlog.Console"]
 	path = snowcoreBlog.Console
-	url = https://github.com/SnowPowerCore/snowcoreBlog.Console
+	url = https://github.com/SnowPowerCore/snowcoreBlog.Console.git
 [submodule "snowcoreBlog.Frontend"]
 	path = snowcoreBlog.Frontend
-	url = https://github.com/SnowPowerCore/snowcoreBlog.Frontend
+	url = https://github.com/SnowPowerCore/snowcoreBlog.Frontend.git
