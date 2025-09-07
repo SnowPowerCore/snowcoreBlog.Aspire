@@ -29,11 +29,11 @@ builder.AddProject<Projects.snowcoreBlog_Backend_Email>("backend-email")
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq);
 
-builder.AddProject<Projects.snowcoreBlog_Backend_Push>("backend-push")
-    .WithReference(cache)
-    .WaitFor(cache)
-    .WithReference(rabbitmq)
-    .WaitFor(rabbitmq);
+// builder.AddProject<Projects.snowcoreBlog_Backend_Push>("backend-push")
+//     .WithReference(cache)
+//     .WaitFor(cache)
+//     .WithReference(rabbitmq)
+//     .WaitFor(rabbitmq);
 
 var backendAuthorsManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_AuthorsManagement>("backend-authorsmanagement")
     .WithReference(cache)
@@ -66,7 +66,8 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
 
 // builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
-builder.Addntfy("ntfy", 4010);
+// builder.Addntfy("ntfy", 4010);
+builder.AddLocalSES("local-ses");
 
 builder.AddYarp("ingress")
     .WithReference(backendAuthorsManagementProject)
