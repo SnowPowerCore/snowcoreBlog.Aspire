@@ -13,6 +13,7 @@ var postgres = builder
     .WithPgWeb();
 
 var dbSnowCoreBlogEntitiesDb = postgres.AddDatabase("db-snowcore-blog-entities");
+var dbSnowCoreBlogArticleEntitiesDb = postgres.AddDatabase("db-snowcore-blog-article-entities");
 var dbIamEntitiesDb = postgres.AddDatabase("db-iam-entities");
 var dbIpRestrictionsEntitiesDb = postgres.AddDatabase("db-ip-restrictions-entities");
 
@@ -58,7 +59,9 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
     .WithReference(cache)
     .WaitFor(cache)
     .WithReference(rabbitmq)
-    .WaitFor(rabbitmq);
+    .WaitFor(rabbitmq)
+    .WithReference(dbSnowCoreBlogArticleEntitiesDb)
+    .WaitFor(dbSnowCoreBlogArticleEntitiesDb);
 
 var backendRegionalIpRestrictionProject = builder.AddProject<Projects.snowcoreBlog_Backend_RegionalIpRestriction>("backend-regionaliprestriction")
     .WithReference(cache)
