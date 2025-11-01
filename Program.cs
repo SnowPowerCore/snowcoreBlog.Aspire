@@ -15,7 +15,7 @@ var postgres = builder
 var dbSnowCoreBlogEntitiesDb = postgres.AddDatabase("db-snowcore-blog-entities");
 var dbSnowCoreBlogArticleEntitiesDb = postgres.AddDatabase("db-snowcore-blog-article-entities");
 var dbIamEntitiesDb = postgres.AddDatabase("db-iam-entities");
-var dbIpRestrictionsEntitiesDb = postgres.AddDatabase("db-ip-restrictions-entities");
+// var dbIpRestrictionsEntitiesDb = postgres.AddDatabase("db-ip-restrictions-entities");
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
@@ -63,13 +63,13 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
     .WithReference(dbSnowCoreBlogArticleEntitiesDb)
     .WaitFor(dbSnowCoreBlogArticleEntitiesDb);
 
-var backendRegionalIpRestrictionProject = builder.AddProject<Projects.snowcoreBlog_Backend_RegionalIpRestriction>("backend-regionaliprestriction")
-    .WithReference(cache)
-    .WaitFor(cache)
-    .WithReference(rabbitmq)
-    .WaitFor(rabbitmq)
-    .WithReference(dbIpRestrictionsEntitiesDb)
-    .WaitFor(dbIpRestrictionsEntitiesDb);
+// var backendRegionalIpRestrictionProject = builder.AddProject<Projects.snowcoreBlog_Backend_RegionalIpRestriction>("backend-regionaliprestriction")
+//     .WithReference(cache)
+//     .WaitFor(cache)
+//     .WithReference(rabbitmq)
+//     .WaitFor(rabbitmq)
+//     .WithReference(dbIpRestrictionsEntitiesDb)
+//     .WaitFor(dbIpRestrictionsEntitiesDb);
 
 // builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
 //     .WaitFor(backendAuthorsManagementProject)
