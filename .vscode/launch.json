@@ -5,8 +5,7 @@
             "name": "C#: snowcoreBlog.Aspire [https]",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\snowcoreBlog.Aspire.csproj",
-            "launchConfigurationId": "TargetFramework=;https",
+            "projectPath": "${workspaceFolder}\\snowcoreBlog.Aspire.csproj"
         },
         {
             "name": "Watch: snowcoreBlog.Frontend.WasmForDebugging",

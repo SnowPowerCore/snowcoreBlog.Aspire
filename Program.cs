@@ -71,7 +71,7 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
 //     .WithReference(dbIpRestrictionsEntitiesDb)
 //     .WaitFor(dbIpRestrictionsEntitiesDb);
 
-builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
+var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
     .WaitFor(backendAuthorsManagementProject)
     .WaitFor(backendReadersManagementProject)
     .WaitFor(backendArticlesProject)
@@ -85,9 +85,15 @@ builder.AddLocalSES("local-ses");
 
 builder.AddYarp("ingress")
     .WithReference(backendAuthorsManagementProject)
+    .WaitFor(backendAuthorsManagementProject)
     .WithReference(backendReadersManagementProject)
+    .WaitFor(backendReadersManagementProject)
     .WithReference(backendArticlesProject)
+    .WaitFor(backendArticlesProject)
+    .WithReference(frontendAppHostProject)
+    .WaitFor(frontendAppHostProject)
     .WithReference(rabbitmq)
+    .WaitFor(rabbitmq)
     .LoadFromConfiguration("ReverseProxy")
     .WithAuthPolicies(
         ("regularReader", policy => policy
