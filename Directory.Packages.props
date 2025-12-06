@@ -1,0 +1,160 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Apizr Packages -->
+    <PackageVersion Include="Apizr" Version="6.4.2" />
+    <PackageVersion Include="Apizr.Extensions.Microsoft.DependencyInjection" Version="6.4.2" />
+    <PackageVersion Include="Apizr.Integrations.FileTransfer.MediatR" Version="6.4.2" />
+    <PackageVersion Include="Apizr.Integrations.Fusillade" Version="6.4.2" />
+    <PackageVersion Include="Apizr.Integrations.MediatR" Version="6.4.2" />
+
+    <!-- Aspire Packages -->
+    <PackageVersion Include="Aspire.Hosting" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="9.5.2" />
+    <PackageVersion Include="Aspire.Npgsql" Version="9.5.2" />
+    <PackageVersion Include="Aspire.StackExchange.Redis" Version="9.5.2" />
+
+    <!-- AWS Packages -->
+    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.14" />
+    <PackageVersion Include="AWSSDK.SimpleEmailV2" Version="4.0.7" />
+
+    <!-- Blazor Auth Packages -->
+    <PackageVersion Include="BitzArt.Blazor.Auth.Client" Version="2.1.0" />
+    <PackageVersion Include="BitzArt.Blazor.Auth.Server" Version="2.1.0" />
+
+    <!-- Blazored Packages -->
+    <PackageVersion Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageVersion Include="Blazored.SessionStorage" Version="2.4.0" />
+
+    <!-- Testing Packages -->
+    <PackageVersion Include="bunit" Version="1.36.0" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="FluentAssertions" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="NSubstitute" Version="5.3.0" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+
+    <!-- Fody Packages -->
+    <PackageVersion Include="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageVersion Include="Fody" Version="6.9.3" />
+
+    <!-- FastEndpoints Packages -->
+    <PackageVersion Include="FastEndpoints" Version="7.1.1" />
+    <PackageVersion Include="FastEndpoints.Generator" Version="7.1.1" />
+    <PackageVersion Include="FastEndpoints.OpenTelemetry" Version="2.3.0" />
+    <PackageVersion Include="FastEndpoints.Security" Version="7.1.1" />
+    <PackageVersion Include="FastEndpoints.Swagger" Version="7.1.1" />
+
+    <!-- Fido2 Packages -->
+    <PackageVersion Include="Fido2" Version="4.0.0" />
+    <PackageVersion Include="Fido2.AspNet" Version="4.0.0" />
+    <PackageVersion Include="Fido2.Models" Version="4.0.0" />
+
+    <!-- FluentValidation -->
+    <PackageVersion Include="FluentValidation" Version="12.1.0" />
+
+    <!-- Database Packages -->
+    <PackageVersion Include="Marten" Version="7.40.5" />
+    <PackageVersion Include="Marten.CommandLine" Version="7.40.5" />
+
+    <!-- MassTransit Packages -->
+    <PackageVersion Include="MassTransit" Version="8.5.5" />
+    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.5.5" />
+
+    <!-- Microsoft AspNetCore Packages -->
+    <PackageVersion Include="Microsoft.AspNetCore.Antiforgery" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.11" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+
+    <!-- Microsoft CodeAnalysis Packages -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="5.0.0" />
+    <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+
+    <!-- Microsoft Extensions Packages -->
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Polly" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="10.0.0" />
+
+    <!-- Microsoft FluentUI Packages -->
+    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.13.1" />
+    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Emoji" Version="4.13.1" />
+    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.13.1" />
+
+    <!-- Microsoft TypeScript -->
+    <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="5.9.3" />
+
+    <!-- MinimalStepified Packages -->
+    <PackageVersion Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
+    <PackageVersion Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
+
+    <!-- Database/Postgres Packages -->
+    <PackageVersion Include="Npgsql.OpenTelemetry" Version="9.0.4" />
+
+    <!-- NSwag -->
+    <PackageVersion Include="NSwag.Generation.AspNetCore" Version="14.6.3" />
+
+    <!-- Ntfy Notifications -->
+    <PackageVersion Include="NtfyCator" Version="0.3.0" />
+
+    <!-- OpenTelemetry Packages -->
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
+
+    <!-- Polly -->
+    <PackageVersion Include="Polly" Version="8.6.4" />
+
+    <!-- Riok Mapperly -->
+    <PackageVersion Include="Riok.Mapperly" Version="4.3.0" />
+
+    <!-- Scalar -->
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.11.0" />
+
+    <!-- SendGrid Packages -->
+    <PackageVersion Include="SendGrid" Version="9.29.3" />
+    <PackageVersion Include="SendGrid.Extensions.DependencyInjection" Version="1.0.1" />
+
+    <!-- Security Packages -->
+    <PackageVersion Include="Sodium.Core" Version="1.4.0" />
+    <PackageVersion Include="Ixnas.AltchaNet" Version="1.1.0" />
+
+    <!-- Blazor UI Packages -->
+    <PackageVersion Include="Soenneker.Blazor.Masonry" Version="3.0.2023" />
+
+    <!-- Stripe -->
+    <PackageVersion Include="Stripe.net" Version="43.13.0" />
+
+    <!-- TimeWarp State Packages -->
+    <PackageVersion Include="TimeWarp.State" Version="11.0.3" />
+    <PackageVersion Include="TimeWarp.State.Plus" Version="11.0.3" />
+    <PackageVersion Include="TimeWarp.State.Policies" Version="11.0.3" />
+
+    <!-- Utilities -->
+    <PackageVersion Include="kli.Localize" Version="2.0.4" />
+    <PackageVersion Include="LocalStorage" Version="2.1.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="WTorricos.Results" Version="2.0.4" />
+
+    <!-- Application Insights -->
+    <PackageVersion Include="Microsoft.ApplicationInsights" Version="2.23.0" />
+  </ItemGroup>
+</Project>

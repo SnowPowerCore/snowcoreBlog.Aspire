@@ -9,15 +9,15 @@
     <UserSecretsId>f4650b45-fed6-4a9a-9b97-2918092e0f30</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.2" />
-    <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.5.2" />
-    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.5.2" />
-    <PackageReference Include="Aspire.Hosting.Redis" Version="9.5.2" />
-    <PackageReference Include="Fody" Version="6.9.3">
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" />
+    <PackageReference Include="Aspire.Hosting.Redis" />
+    <PackageReference Include="Fody">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageReference Include="ConfigureAwait.Fody" />
   </ItemGroup>
   <ItemGroup>
     <None Update="**/FodyWeavers.*" Visible="false" />
@@ -37,6 +37,7 @@
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Push\snowcoreBlog.Backend.Push.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\NotificationsManagement\snowcoreBlog.Backend.NotificationsManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
   </ItemGroup>
