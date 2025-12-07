@@ -29,13 +29,12 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\AspireYarpGateway\snowcoreBlog.Backend.AspireYarpGateway.csproj" IsAspireProjectResource="false" />
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\AuthorsManagement\snowcoreBlog.Backend.AuthorsManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\AspireYarpGateway\snowcoreBlog.Backend.AspireYarpGateway.csproj" IsAspireProjectResource="false" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\RegionalIpRestriction\snowcoreBlog.Backend.RegionalIpRestriction.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Push\snowcoreBlog.Backend.Push.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\NotificationsManagement\snowcoreBlog.Backend.NotificationsManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
