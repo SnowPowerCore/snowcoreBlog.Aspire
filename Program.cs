@@ -79,12 +79,12 @@ var backendNotificationsManagementProject = builder.AddProject<Projects.snowcore
 //     .WithReference(dbIpRestrictionsEntitiesDb)
 //     .WaitFor(dbIpRestrictionsEntitiesDb);
 
-// var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
-//     .WaitFor(backendAuthorsManagementProject)
-//     .WaitFor(backendReadersManagementProject)
-//     .WaitFor(backendArticlesProject)
-//     .WithReference(cache)
-//     .WaitFor(cache);
+var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
+    .WaitFor(backendAuthorsManagementProject)
+    .WaitFor(backendReadersManagementProject)
+    .WaitFor(backendArticlesProject)
+    .WithReference(cache)
+    .WaitFor(cache);
 
 // builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
@@ -100,8 +100,8 @@ builder.AddYarp("ingress")
     .WaitFor(backendArticlesProject)
     .WithReference(backendNotificationsManagementProject)
     .WaitFor(backendNotificationsManagementProject)
-    // .WithReference(frontendAppHostProject)
-    // .WaitFor(frontendAppHostProject)
+    .WithReference(frontendAppHostProject)
+    .WaitFor(frontendAppHostProject)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
     .LoadFromConfiguration("ReverseProxy")
