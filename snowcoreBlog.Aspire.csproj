@@ -36,7 +36,7 @@
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\RegionalIpRestriction\snowcoreBlog.Backend.RegionalIpRestriction.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\IAM\snowcoreBlog.Backend.IAM.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Push\snowcoreBlog.Backend.Push.csproj" />
-    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\NotificationsManagement\snowcoreBlog.Backend.NotificationsManagement.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\ServiceNotifications\snowcoreBlog.Backend.ServiceNotifications.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
   </ItemGroup>

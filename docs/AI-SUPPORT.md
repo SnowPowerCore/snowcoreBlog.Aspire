@@ -24,7 +24,7 @@ Backend:
 - `snowcoreBlog.Backend/BusinessServices/*` (domain-facing microservices)
   - Examples: `Articles`, `AuthorsManagement`, `ReadersManagement`
 - `snowcoreBlog.Backend/Shared/Services/*` (cross-cutting / platform microservices)
-  - Examples: `IAM`, `Email`, `Push`, `NotificationsManagement`, `AspireYarpGateway`, `RegionalIpRestriction`
+  - Examples: `IAM`, `Email`, `Push`, `ServiceNotifications`, `AspireYarpGateway`, `RegionalIpRestriction`
 - `snowcoreBlog.Backend/Shared/*` (shared backend libraries)
   - `Infrastructure` contains reusable instrumentation + repositories, middleware, utilities
 
@@ -81,7 +81,7 @@ Routes are grouped by service and remove a service-specific prefix:
 - `/api/articles/{**catch-all}` → backend articles (prefix removed: `/api/articles`)
 - `/api/authors/{**catch-all}` → backend authors management
 - `/api/readers/{**catch-all}` → backend readers management
-- `/api/notifications/{**catch-all}` → backend notifications management
+- `/api/notifications/{**catch-all}` → backend service notifications
 
 Frontend is mounted under:
 - `/app/{**catch-all}` → `frontend-apphost` with `X-Forwarded-BasePath: /app`
@@ -103,7 +103,7 @@ When adding a new route:
 
 ## 4) Backend microservice baseline (what “normal” looks like here)
 
-Most backend services follow a consistent structure (see `BusinessServices/Articles/Program.cs` or `Shared/Services/NotificationsManagement/Program.cs`).
+Most backend services follow a consistent structure (see `BusinessServices/Articles/Program.cs` or `Shared/Services/ServiceNotifications/Program.cs`).
 
 ### 4.1 Web host setup
 Common setup patterns:
