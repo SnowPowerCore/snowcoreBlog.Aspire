@@ -1,0 +1,67 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Apps/">
+    <Project Path="snowcoreBlog.Console/App/snowcoreBlog.Console.App.csproj" />
+  </Folder>
+  <Folder Name="/Backend/">
+    <Project Path="snowcoreBlog.Backend/BusinessServices/Articles/snowcoreBlog.Backend.Articles.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/AuthorsManagement/snowcoreBlog.Backend.AuthorsManagement.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/ReadersManagement/snowcoreBlog.Backend.ReadersManagement.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Core/snowcoreBlog.Backend.Core.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Gateway.Middleware/snowcoreBlog.Backend.Gateway.Middleware.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Infrastructure/snowcoreBlog.Backend.Infrastructure.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/AspireYarpGateway/snowcoreBlog.Backend.AspireYarpGateway.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/Email/snowcoreBlog.Backend.Email.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/IAM/snowcoreBlog.Backend.IAM.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/NotificationsManagement/snowcoreBlog.Backend.NotificationsManagement.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/Push/snowcoreBlog.Backend.Push.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/RegionalIpRestriction/snowcoreBlog.Backend.RegionalIpRestriction.csproj" />
+    <Project Path="snowcoreBlog.Backend/snowcoreBlog.Universal/PublicApi/snowcoreBlog.PublicApi.csproj" />
+  </Folder>
+  <Folder Name="/ClientFrontend/">
+    <Project Path="snowcoreBlog.Frontend/Host/snowcoreBlog.Frontend.Host.csproj" />
+    <Project Path="snowcoreBlog.Frontend/Modules/Articles/snowcoreBlog.Frontend.Articles.csproj" />
+    <Project Path="snowcoreBlog.Frontend/Modules/AuthorsManagement/snowcoreBlog.Frontend.AuthorsManagement.csproj" />
+    <Project Path="snowcoreBlog.Frontend/Modules/Notifications/snowcoreBlog.Frontend.Notifications.csproj" />
+    <Project Path="snowcoreBlog.Frontend/Modules/ReadersManagement/snowcoreBlog.Frontend.ReadersManagement.csproj" />
+    <Project Path="snowcoreBlog.Frontend/Modules/SharedComponents/snowcoreBlog.Frontend.SharedComponents.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Client/snowcoreBlog.Frontend.Client.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.ClientShared/snowcoreBlog.Frontend.ClientShared.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Core/snowcoreBlog.Frontend.Core.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Infrastructure/snowcoreBlog.Frontend.Infrastructure.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.WasmForDebugging/snowcoreBlog.Frontend.WasmForDebugging.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".gitmodules" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="snowcoreBlog.Backend/BusinessServices/Articles.Tests/snowcoreBlog.Backend.Articles.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/AuthorsManagement.Tests/snowcoreBlog.Backend.AuthorsManagement.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/ReadersManagement.Tests/snowcoreBlog.Backend.ReadersManagement.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Core.Tests/snowcoreBlog.Backend.Core.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Email.Core.Tests/snowcoreBlog.Backend.Email.Core.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/IAM.Core.Tests/snowcoreBlog.Backend.IAM.Core.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Infrastructure.Tests/snowcoreBlog.Backend.Infrastructure.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Push.Core.Tests/snowcoreBlog.Backend.Push.Core.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/Email.Tests/snowcoreBlog.Backend.Email.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/IAM.Tests/snowcoreBlog.Backend.IAM.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/NotificationsManagement.Tests/snowcoreBlog.Backend.NotificationsManagement.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/Push.Tests/snowcoreBlog.Backend.Push.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/RegionalIpRestriction.Tests/snowcoreBlog.Backend.RegionalIpRestriction.Tests.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Articles.Tests/snowcoreBlog.Frontend.Articles.Tests.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Core.Tests/snowcoreBlog.Frontend.Core.Tests.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Infrastructure.Tests/snowcoreBlog.Frontend.Infrastructure.Tests.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Notifications.Tests/snowcoreBlog.Frontend.Notifications.Tests.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.ReadersManagement.Tests/snowcoreBlog.Frontend.ReadersManagement.Tests.csproj" />
+    <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.SharedComponents.Tests/snowcoreBlog.Frontend.SharedComponents.Tests.csproj" />
+  </Folder>
+  <Project Path="snowcoreBlog.Aspire.csproj" />
+</Solution>

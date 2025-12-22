@@ -1,6 +1,8 @@
 ```instructions
 This repository is an Aspire-based monorepo for the snowcoreBlog sample platform. Use these notes to be productive immediately when authoring or changing code.
 
+Extended AI context and conventions live in: `docs/AI-SUPPORT.md`
+
 High-level architecture (read `Program.cs` and `*.csproj`):
 - The top-level host is `snowcoreBlog.Aspire` (see `Program.cs`) which uses the Aspire SDK (Aspire.Hosting.*) to wire up local infra: Redis (cache), RabbitMQ, PostgreSQL, Local SES and YARP reverse proxy.
 - Backend services live under `snowcoreBlog.Backend/BusinessServices` and `snowcoreBlog.Backend/Shared/Services` (IAM, Email, Push, AspireYarpGateway, etc.). Frontend projects are under `snowcoreBlog.Frontend/**` (Host, Client, ClientShared, WasmForDebugging).
@@ -29,7 +31,7 @@ Integration points and external systems to be aware of:
 
 Where to look for examples:
 - Root wiring: `Program.cs` (how projects/resources are registered).
-- Project list & packaging: `snowcoreBlog.Aspire.csproj` and the solution file `snowcoreBlog.Aspire.sln`.
+- Project list & packaging: `snowcoreBlog.Aspire.csproj` and the solution file `snowcoreBlog.Aspire.slnx`.
 - Fody / weaving: `FodyWeavers.xml` and `FodyWeavers.xsd` in repo root.
 - Service-level instructions: `snowcoreBlog.Backend/Shared/Services/IMS/.github/copilot-instructions.md` and `.../Stripe/.github/copilot-instructions.md` — follow these microservice notes when editing those services.
 
