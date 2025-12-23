@@ -15,7 +15,7 @@ var postgres = builder
 var dbSnowCoreBlogEntitiesDb = postgres.AddDatabase("db-snowcore-blog-entities");
 var dbSnowCoreBlogArticleEntitiesDb = postgres.AddDatabase("db-snowcore-blog-article-entities");
 var dbIamEntitiesDb = postgres.AddDatabase("db-iam-entities");
-// var dbIpRestrictionsEntitiesDb = postgres.AddDatabase("db-ip-restrictions-entities");
+var dbIpRestrictionsEntitiesDb = postgres.AddDatabase("db-ip-restrictions-entities");
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
@@ -71,13 +71,21 @@ var backendServiceNotificationsProject = builder.AddProject<Projects.snowcoreBlo
     .WithReference(dbSnowCoreBlogEntitiesDb)
     .WaitFor(dbSnowCoreBlogEntitiesDb);
 
-// var backendRegionalIpRestrictionProject = builder.AddProject<Projects.snowcoreBlog_Backend_RegionalIpRestriction>("backend-regionaliprestriction")
+// var backendApiAccessRestrictionsProject = builder.AddProject<Projects.snowcoreBlog_Backend_ApiAccessRestrictions>("backend-apiaccessrestrictions")
 //     .WithReference(cache)
 //     .WaitFor(cache)
 //     .WithReference(rabbitmq)
 //     .WaitFor(rabbitmq)
 //     .WithReference(dbIpRestrictionsEntitiesDb)
 //     .WaitFor(dbIpRestrictionsEntitiesDb);
+
+var backendApiAccessRestrictionsProject = builder.AddProject<Projects.snowcoreBlog_Backend_ApiAccessRestrictions>("backend-apiaccessrestrictions")
+    .WithReference(cache)
+    .WaitFor(cache)
+    .WithReference(rabbitmq)
+    .WaitFor(rabbitmq)
+    .WithReference(dbIpRestrictionsEntitiesDb)
+    .WaitFor(dbIpRestrictionsEntitiesDb);
 
 var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
     .WaitFor(backendAuthorsManagementProject)
@@ -100,6 +108,8 @@ builder.AddYarp("ingress")
     .WaitFor(backendArticlesProject)
     .WithReference(backendServiceNotificationsProject)
     .WaitFor(backendServiceNotificationsProject)
+    .WithReference(backendApiAccessRestrictionsProject)
+    .WaitFor(backendApiAccessRestrictionsProject)
     .WithReference(frontendAppHostProject)
     .WaitFor(frontendAppHostProject)
     .WithReference(rabbitmq)

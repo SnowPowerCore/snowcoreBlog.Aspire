@@ -24,7 +24,7 @@ Backend:
 - `snowcoreBlog.Backend/BusinessServices/*` (domain-facing microservices)
   - Examples: `Articles`, `AuthorsManagement`, `ReadersManagement`
 - `snowcoreBlog.Backend/Shared/Services/*` (cross-cutting / platform microservices)
-  - Examples: `IAM`, `Email`, `Push`, `ServiceNotifications`, `AspireYarpGateway`, `RegionalIpRestriction`
+  - Examples: `IAM`, `Email`, `Push`, `ServiceNotifications`, `AspireYarpGateway`, `ApiAccessRestrictions`
 - `snowcoreBlog.Backend/Shared/*` (shared backend libraries)
   - `Infrastructure` contains reusable instrumentation + repositories, middleware, utilities
 

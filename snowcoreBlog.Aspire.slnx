@@ -19,7 +19,7 @@
     <Project Path="snowcoreBlog.Backend/Shared/Services/IAM/snowcoreBlog.Backend.IAM.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/ServiceNotifications/snowcoreBlog.Backend.ServiceNotifications.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/Push/snowcoreBlog.Backend.Push.csproj" />
-    <Project Path="snowcoreBlog.Backend/Shared/Services/RegionalIpRestriction/snowcoreBlog.Backend.RegionalIpRestriction.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions/snowcoreBlog.Backend.ApiAccessRestrictions.csproj" />
     <Project Path="snowcoreBlog.Backend/snowcoreBlog.Universal/PublicApi/snowcoreBlog.PublicApi.csproj" />
   </Folder>
   <Folder Name="/ClientFrontend/">
@@ -55,7 +55,7 @@
     <Project Path="snowcoreBlog.Backend/Shared/Services/IAM.Tests/snowcoreBlog.Backend.IAM.Tests.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/ServiceNotifications.Tests/snowcoreBlog.Backend.ServiceNotifications.Tests.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/Push.Tests/snowcoreBlog.Backend.Push.Tests.csproj" />
-    <Project Path="snowcoreBlog.Backend/Shared/Services/RegionalIpRestriction.Tests/snowcoreBlog.Backend.RegionalIpRestriction.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions.Tests/snowcoreBlog.Backend.ApiAccessRestrictions.Tests.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Articles.Tests/snowcoreBlog.Frontend.Articles.Tests.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Core.Tests/snowcoreBlog.Frontend.Core.Tests.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Infrastructure.Tests/snowcoreBlog.Frontend.Infrastructure.Tests.csproj" />
