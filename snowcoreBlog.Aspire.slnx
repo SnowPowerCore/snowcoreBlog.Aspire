@@ -5,7 +5,6 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Apps/">
-    <Project Path="snowcoreBlog.App/snowcoreBlog.App/snowcoreBlog.App.csproj" />
     <Project Path="snowcoreBlog.Console/App/snowcoreBlog.Console.App.csproj" />
   </Folder>
   <Folder Name="/Backend/">

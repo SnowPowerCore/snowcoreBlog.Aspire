@@ -63,13 +63,13 @@ var backendArticlesProject = builder.AddProject<Projects.snowcoreBlog_Backend_Ar
     .WithReference(dbSnowCoreBlogArticleEntitiesDb)
     .WaitFor(dbSnowCoreBlogArticleEntitiesDb);
 
-var backendUrlShortenerProject = builder.AddProject<Projects.snowcoreBlog_Backend_UrlShortener>("backend-urlshortener")
-    .WithReference(cache)
-    .WaitFor(cache)
-    .WithReference(rabbitmq)
-    .WaitFor(rabbitmq)
-    .WithReference(dbSnowCoreBlogEntitiesDb)
-    .WaitFor(dbSnowCoreBlogEntitiesDb);
+// var backendUrlShortenerProject = builder.AddProject<Projects.snowcoreBlog_Backend_UrlShortener>("backend-urlshortener")
+//     .WithReference(cache)
+//     .WaitFor(cache)
+//     .WithReference(rabbitmq)
+//     .WaitFor(rabbitmq)
+//     .WithReference(dbSnowCoreBlogEntitiesDb)
+//     .WaitFor(dbSnowCoreBlogEntitiesDb);
 
 var backendServiceNotificationsProject = builder.AddProject<Projects.snowcoreBlog_Backend_ServiceNotifications>("backend-servicenotifications")
     .WithReference(cache)
