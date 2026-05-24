@@ -5,6 +5,7 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/Apps/">
+    <Project Path="snowcoreBlog.App/snowcoreBlog.App/snowcoreBlog.App.csproj" />
     <Project Path="snowcoreBlog.Console/App/snowcoreBlog.Console.App.csproj" />
   </Folder>
   <Folder Name="/Backend/">
@@ -20,6 +21,7 @@
     <Project Path="snowcoreBlog.Backend/Shared/Services/ServiceNotifications/snowcoreBlog.Backend.ServiceNotifications.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/Push/snowcoreBlog.Backend.Push.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions/snowcoreBlog.Backend.ApiAccessRestrictions.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/UrlShortener/snowcoreBlog.Backend.UrlShortener.csproj" />
     <Project Path="snowcoreBlog.Backend/snowcoreBlog.Universal/PublicApi/snowcoreBlog.PublicApi.csproj" />
   </Folder>
   <Folder Name="/ClientFrontend/">
