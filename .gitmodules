@@ -7,3 +7,6 @@
 [submodule "snowcoreBlog.Frontend"]
 	path = snowcoreBlog.Frontend
 	url = https://github.com/SnowPowerCore/snowcoreBlog.Frontend.git
+[submodule "snowcoreBlog.App"]
+	path = snowcoreBlog.App
+	url = https://github.com/SnowPowerCore/snowcoreBlog.App.git
