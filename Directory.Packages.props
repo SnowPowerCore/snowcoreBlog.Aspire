@@ -51,6 +51,7 @@
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <!-- Database Packages -->
     <PackageVersion Include="Marten" Version="9.7.6" />
+    <PackageVersion Include="Marten.SourceGenerator" Version="9.7.6" />
     <PackageVersion Include="Marten.CommandLine" Version="7.40.5" />
     <!-- MassTransit Packages -->
     <PackageVersion Include="MassTransit" Version="8.5.5" />
