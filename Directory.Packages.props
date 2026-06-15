@@ -10,16 +10,16 @@
     <PackageVersion Include="Apizr.Integrations.Fusillade" Version="6.4.2" />
     <PackageVersion Include="Apizr.Integrations.MediatR" Version="6.4.2" />
     <!-- Aspire Packages -->
-    <PackageVersion Include="Aspire.Hosting" Version="13.4.3" />
-    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.4.3" />
-    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.4.3" />
-    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="13.4.3" />
-    <PackageVersion Include="Aspire.Hosting.Redis" Version="13.4.3" />
-    <PackageVersion Include="Aspire.Npgsql" Version="13.4.3" />
-    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.4.3" />
+    <PackageVersion Include="Aspire.Hosting" Version="13.4.4" />
+    <PackageVersion Include="Aspire.Hosting.AppHost" Version="13.4.4" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="13.4.4" />
+    <PackageVersion Include="Aspire.Hosting.RabbitMQ" Version="13.4.4" />
+    <PackageVersion Include="Aspire.Hosting.Redis" Version="13.4.4" />
+    <PackageVersion Include="Aspire.Npgsql" Version="13.4.4" />
+    <PackageVersion Include="Aspire.StackExchange.Redis" Version="13.4.4" />
     <!-- AWS Packages -->
-    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.7" />
-    <PackageVersion Include="AWSSDK.SimpleEmailV2" Version="4.0.14.5" />
+    <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.8" />
+    <PackageVersion Include="AWSSDK.SimpleEmailV2" Version="4.0.14.6" />
     <!-- Blazor Auth Packages -->
     <PackageVersion Include="BitzArt.Blazor.Auth.Client" Version="2.1.1" />
     <PackageVersion Include="BitzArt.Blazor.Auth.Server" Version="2.1.1" />
@@ -50,12 +50,12 @@
     <!-- FluentValidation -->
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
     <!-- Database Packages -->
-    <PackageVersion Include="Marten" Version="9.7.6" />
-    <PackageVersion Include="Marten.SourceGenerator" Version="9.7.6" />
+    <PackageVersion Include="Marten" Version="9.8.1" />
+    <PackageVersion Include="Marten.SourceGenerator" Version="9.8.1" />
     <PackageVersion Include="Marten.CommandLine" Version="7.40.5" />
     <!-- MassTransit Packages -->
-    <PackageVersion Include="MassTransit" Version="8.5.5" />
-    <PackageVersion Include="MassTransit.RabbitMQ" Version="9.1.2" />
+    <PackageVersion Include="MassTransit" Version="8.5.10" />
+    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.5.10" />
     <!-- Microsoft AspNetCore Packages -->
     <PackageVersion Include="Microsoft.AspNetCore.Antiforgery" Version="2.3.11" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.9" />
@@ -77,14 +77,16 @@
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="10.0.0" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="10.7.0" />
     <!-- Microsoft FluentUI Packages -->
-    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.14.2" />
-    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Emoji" Version="4.14.2" />
-    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.14.2" />
+    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.13.1" />
+    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Emoji" Version="4.13.1" />
+    <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.13.1" />
     <!-- Microsoft TypeScript -->
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="6.0.3" />
     <!-- MinimalStepified Packages -->
     <PackageVersion Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
     <PackageVersion Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
+    <!-- MessagePack Package-->
+    <PackageVersion Include="MessagePack" Version="3.1.7" />
     <!-- Database/Postgres Packages -->
     <PackageVersion Include="Npgsql.OpenTelemetry" Version="10.0.3" />
     <!-- NSwag -->
@@ -92,12 +94,14 @@
     <!-- Ntfy Notifications -->
     <PackageVersion Include="NtfyCator" Version="0.3.0" />
     <!-- OpenTelemetry Packages -->
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.16.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.10.0-beta.1" />
+    <!-- Microsoft.Bcl.Memory Package-->
+    <PackageVersion Include="Microsoft.Bcl.Memory" Version="10.0.9" />
     <!-- Polly -->
     <PackageVersion Include="Polly" Version="8.7.0" />
     <!-- Riok Mapperly -->
