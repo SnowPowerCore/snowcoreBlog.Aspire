@@ -41,6 +41,8 @@
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
     <File Path=".gitmodules" />
+    <File Path="nuget.config" />
+    <File Path="aspire.config.json" />
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/Tests/">

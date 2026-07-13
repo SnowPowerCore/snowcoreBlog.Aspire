@@ -79,14 +79,6 @@ var backendServiceNotificationsProject = builder.AddProject<Projects.snowcoreBlo
     .WithReference(dbSnowCoreBlogEntitiesDb)
     .WaitFor(dbSnowCoreBlogEntitiesDb);
 
-// var backendApiAccessRestrictionsProject = builder.AddProject<Projects.snowcoreBlog_Backend_ApiAccessRestrictions>("backend-apiaccessrestrictions")
-//     .WithReference(cache)
-//     .WaitFor(cache)
-//     .WithReference(rabbitmq)
-//     .WaitFor(rabbitmq)
-//     .WithReference(dbIpRestrictionsEntitiesDb)
-//     .WaitFor(dbIpRestrictionsEntitiesDb);
-
 var backendApiAccessRestrictionsProject = builder.AddProject<Projects.snowcoreBlog_Backend_ApiAccessRestrictions>("backend-apiaccessrestrictions")
     .WithReference(cache)
     .WaitFor(cache)
