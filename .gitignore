@@ -361,3 +361,12 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+**/skills-lock.json
+.agents/**
+.clinerules/**
+.cursor/**
+.github/**
+.opencode/**
+.windsurf/**
+AGENTS.md

@@ -1,0 +1,19 @@
+{
+    // Required for C# WASM breakpoints: spawns the extension's own BrowserDebugHost
+    // bridge (--UseVsDbg true) instead of the legacy ws-proxy path, which fails on
+    // .NET 10 because the ws-proxy 302-redirects and the CDP client cannot follow
+    // WebSocket redirects ("302 when 101 expected"). JS breakpoints work either way.
+    "csharp.wasm.debug.useVSDbg": true,
+    "blazorWasmDebug.projects": [
+        {
+            "name": "snowcoreBlog.Frontend.WasmForDebugging",
+            "url": "https://localhost:7288",          // optional: auto-read from launchSettings.json
+            "projectPath": "${workspaceFolder}\\snowcoreBlog.Frontend\\snowcoreBlog.Frontend.WasmForDebugging",  // host/server project folder
+            "hosted": true
+        }
+    ],
+    "blazorWasmDebug.browser": "debug",
+    "blazorWasmDebug.browserDebugTarget": "edge",
+    "blazorWasmDebug.autoApplyHotReload": true,
+    "blazorWasmDebug.serverReadyTimeoutMs": 75000
+}

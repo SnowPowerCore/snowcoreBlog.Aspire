@@ -19,6 +19,15 @@
     <!-- AWS Packages -->
     <PackageVersion Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.4.8" />
     <PackageVersion Include="AWSSDK.SimpleEmailV2" Version="4.0.14.6" />
+    <!-- ActualLab.Fusion Packages (real-time nickname availability) -->
+    <PackageVersion Include="ActualLab.Fusion" Version="14.3.4" />
+    <PackageVersion Include="ActualLab.Fusion.Blazor" Version="14.3.4" />
+    <PackageVersion Include="ActualLab.Fusion.Server" Version="14.3.4" />
+    <PackageVersion Include="ActualLab.Fusion.Blazor.Authentication" Version="14.3.4" />
+    <PackageVersion Include="ActualLab.Generators" Version="14.3.4" />
+    <PackageVersion Include="ActualLab.Rpc" Version="14.3.4" />
+    <PackageVersion Include="Markdig" Version="1.4.0" />
+    <PackageVersion Include="MemoryPack" Version="1.21.4" />
     <!-- Blazor Auth Packages -->
     <PackageVersion Include="BitzArt.Blazor.Auth.Client" Version="2.1.1" />
     <PackageVersion Include="BitzArt.Blazor.Auth.Server" Version="2.1.1" />
@@ -85,7 +94,7 @@
     <PackageVersion Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
     <PackageVersion Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
     <!-- MessagePack Package-->
-    <PackageVersion Include="MessagePack" Version="3.1.7" />
+    <PackageVersion Include="MessagePack" Version="3.1.8" />
     <!-- Database/Postgres Packages -->
     <PackageVersion Include="Npgsql.OpenTelemetry" Version="10.0.3" />
     <!-- NSwag -->

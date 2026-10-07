@@ -5,7 +5,25 @@
             "name": "C#: snowcoreBlog.Aspire [https]",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}\\snowcoreBlog.Aspire.csproj"
+            "projectPath": "${workspaceFolder}\\snowcoreBlog.Aspire.csproj",
+            "serverReadyAction": {
+                "pattern": "(https://\\S+/login\\?t=[0-9a-zA-Z]+)",
+                "uriFormat": "%s",
+                "action": "openIntegratedBrowser",
+                "killOnServerStop": false
+            }
+        },
+        {
+            "name": "Launch Blazor WASM (Watch + Integrated Browser)",
+            "type": "blazor-wasm",
+            "request": "launch",
+            "project": "${workspaceFolder}\\snowcoreBlog.Frontend\\snowcoreBlog.Frontend.WasmForDebugging", // project dir or .csproj; default: workspace folder
+            "watch": true,                                // dotnet watch (Hot Reload); false = plain dotnet run
+            "readyTimeoutMs": 75000,                      // full-readiness gate timeout
+            "strictHttpOk": false,                        // true = require final status < 400
+            "openBrowser": true,                          // false = only run + gate, no browser session
+            "logLevel": "debug",                          // output-channel verbosity
+            "logFile": false                              // also log to .vscode/blazor-wasm-debug.log
         },
         {
             "name": "Watch: snowcoreBlog.Frontend.WasmForDebugging",
