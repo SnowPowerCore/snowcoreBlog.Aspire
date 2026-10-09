@@ -1,6 +1,10 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+// WithDataVolume persists Redis snapshots across host restarts. Without it every
+// restart wipes the refresh-token records (reader-refresh:*) and all active
+// sessions die with 401 "Invalid refresh token" on the next proactive rotation.
 var cache = builder.AddRedis("cache")
+    .WithDataVolume()
     .WithRedisInsight();
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq")
@@ -87,12 +91,12 @@ var backendApiAccessRestrictionsProject = builder.AddProject<Projects.snowcoreBl
     .WithReference(dbIpRestrictionsEntitiesDb)
     .WaitFor(dbIpRestrictionsEntitiesDb);
 
-var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
-    .WaitFor(backendAuthorsManagementProject)
-    .WaitFor(backendReadersManagementProject)
-    .WaitFor(backendArticlesProject)
-    .WithReference(cache)
-    .WaitFor(cache);
+// var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
+//     .WaitFor(backendAuthorsManagementProject)
+//     .WaitFor(backendReadersManagementProject)
+//     .WaitFor(backendArticlesProject)
+//     .WithReference(cache)
+//     .WaitFor(cache);
 
 // builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
@@ -110,8 +114,8 @@ builder.AddYarp("ingress")
     .WaitFor(backendServiceNotificationsProject)
     .WithReference(backendApiAccessRestrictionsProject)
     .WaitFor(backendApiAccessRestrictionsProject)
-    .WithReference(frontendAppHostProject)
-    .WaitFor(frontendAppHostProject)
+    // .WithReference(frontendAppHostProject)
+    // .WaitFor(frontendAppHostProject)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
     .LoadFromConfiguration("ReverseProxy")
