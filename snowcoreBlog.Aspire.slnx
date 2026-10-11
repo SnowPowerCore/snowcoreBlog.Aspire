@@ -21,6 +21,7 @@
     <Project Path="snowcoreBlog.Backend/Shared/Services/Push/snowcoreBlog.Backend.Push.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions/snowcoreBlog.Backend.ApiAccessRestrictions.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/UrlShortener/snowcoreBlog.Backend.UrlShortener.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/Documents/snowcoreBlog.Backend.Documents.csproj" />
     <Project Path="snowcoreBlog.Backend/snowcoreBlog.Universal/PublicApi/snowcoreBlog.PublicApi.csproj" />
   </Folder>
   <Folder Name="/ClientFrontend/">
@@ -59,6 +60,7 @@
     <Project Path="snowcoreBlog.Backend/Shared/Services/ServiceNotifications.Tests/snowcoreBlog.Backend.ServiceNotifications.Tests.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/Push.Tests/snowcoreBlog.Backend.Push.Tests.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions.Tests/snowcoreBlog.Backend.ApiAccessRestrictions.Tests.csproj" />
+    <Project Path="snowcoreBlog.Backend/Shared/Services/Documents.Tests/snowcoreBlog.Backend.Documents.Tests.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Articles.Tests/snowcoreBlog.Frontend.Articles.Tests.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Core.Tests/snowcoreBlog.Frontend.Core.Tests.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Infrastructure.Tests/snowcoreBlog.Frontend.Infrastructure.Tests.csproj" />

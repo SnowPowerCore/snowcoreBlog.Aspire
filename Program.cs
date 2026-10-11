@@ -20,6 +20,7 @@ var dbSnowCoreBlogEntitiesDb = postgres.AddDatabase("db-snowcore-blog-entities")
 var dbSnowCoreBlogArticleEntitiesDb = postgres.AddDatabase("db-snowcore-blog-article-entities");
 var dbIamEntitiesDb = postgres.AddDatabase("db-iam-entities");
 var dbIpRestrictionsEntitiesDb = postgres.AddDatabase("db-ip-restrictions-entities");
+var dbDocumentsEntitiesDb = postgres.AddDatabase("db-documents-entities");
 
 builder.AddProject<Projects.snowcoreBlog_Backend_IAM>("backend-iam")
     .WithReference(cache)
@@ -91,6 +92,14 @@ var backendApiAccessRestrictionsProject = builder.AddProject<Projects.snowcoreBl
     .WithReference(dbIpRestrictionsEntitiesDb)
     .WaitFor(dbIpRestrictionsEntitiesDb);
 
+var backendDocumentsProject = builder.AddProject<Projects.snowcoreBlog_Backend_Documents>("backend-documents")
+    .WithReference(cache)
+    .WaitFor(cache)
+    .WithReference(rabbitmq)
+    .WaitFor(rabbitmq)
+    .WithReference(dbDocumentsEntitiesDb)
+    .WaitFor(dbDocumentsEntitiesDb);
+
 var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
     .WaitFor(backendAuthorsManagementProject)
     .WaitFor(backendReadersManagementProject)
@@ -114,10 +123,14 @@ builder.AddYarp("ingress")
     .WaitFor(backendServiceNotificationsProject)
     .WithReference(backendApiAccessRestrictionsProject)
     .WaitFor(backendApiAccessRestrictionsProject)
+    .WithReference(backendDocumentsProject)
+    .WaitFor(backendDocumentsProject)
     .WithReference(frontendAppHostProject)
     .WaitFor(frontendAppHostProject)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
+    .WithReference(cache)
+    .WaitFor(cache)
     .LoadFromConfiguration("ReverseProxy")
     .WithAuthPolicies(
         ("regularReader", policy => policy
