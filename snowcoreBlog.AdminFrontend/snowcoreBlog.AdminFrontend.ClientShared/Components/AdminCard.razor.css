@@ -1,0 +1,10 @@
+.admin-card { margin-bottom: 20px; }
+
+.admin-card-header {
+    margin-bottom: 16px;
+}
+
+.admin-card-title {
+    font-size: 16px;
+    font-weight: 600;
+}

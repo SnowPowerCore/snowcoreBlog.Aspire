@@ -1,0 +1,77 @@
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+
+@inject IApizrManager<IAdminsApi> AdminsAdmin
+@inject NavigationManager Navigation
+
+<header class="admin-header">
+    <div class="admin-header-inner d-flex align-items-center gap-3">
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="10" VerticalAlignment="VerticalAlignment.Center">
+            <FluentIcon Value="@(new Icons.Color.Size28.CodeBlock())" Class="cursor-pointer" @onclick="@(() => Navigation.NavigateTo(""))" />
+            <FluentStack Orientation="Orientation.Vertical" VerticalGap="0" Class="cursor-pointer" @onclick="@(() => Navigation.NavigateTo(""))">
+                <span class="admin-header-title">snowcore's Blog</span>
+                <span class="admin-header-subtitle">Admin Portal</span>
+            </FluentStack>
+        </FluentStack>
+
+        <FluentSpacer />
+
+        @if (_me is not default(AdminDto))
+        {
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="8" VerticalAlignment="VerticalAlignment.Center" Class="admin-header-identity">
+                <span class="admin-identity-email d-block text-truncate" title="@_me.Email">@_me.Email</span>
+                <FluentButton Id="admin-user-menu-button"
+                              IconStart="@(new Icons.Regular.Size20.PersonCircle())"
+                              Appearance="Appearance.Lightweight"
+                              @onclick="ToggleMenu" />
+                <FluentMenu @bind-Open="_menuOpen" Anchor="admin-user-menu-button">
+                    <FluentMenuItem Disabled>
+                        <FluentIcon Value="@(new Icons.Regular.Size20.Person())" Slot="start" />
+                        @(_me.NickName is { Length: > 0 } n ? n : _me.Email)
+                    </FluentMenuItem>
+                    <FluentDivider Class="w-100 my-1" Role="DividerRole.Presentation" />
+                    <FluentMenuItem @onclick="HandleSignOut">
+                        <FluentIcon Value="@(new Icons.Regular.Size20.SignOut())" Slot="start" />
+                        Sign out
+                    </FluentMenuItem>
+                </FluentMenu>
+            </FluentStack>
+        }
+        else
+        {
+            <FluentAnchor Href="login" Appearance="Appearance.Accent" IconStart="@(new Icons.Regular.Size20.Person())">Sign in</FluentAnchor>
+        }
+    </div>
+</header>
+
+@code
+{
+    private AdminDto? _me;
+    private bool _menuOpen;
+
+    protected override void OnInitialized()
+    {
+        _ = RefreshIdentityAsync();
+        Navigation.LocationChanged += async (_, _) => await RefreshIdentityAsync();
+    }
+
+    private async Task RefreshIdentityAsync()
+    {
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.Me(options));
+        var me = response.ToData<AdminDto>(out _);
+        if (me?.Id != _me?.Id)
+        {
+            _me = me;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void ToggleMenu() => _menuOpen = !_menuOpen;
+
+    private async Task HandleSignOut()
+    {
+        _menuOpen = false;
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.Logout(options));
+        response.ToData<object>(out _);
+        Navigation.NavigateTo("login", forceLoad: true);
+    }
+}

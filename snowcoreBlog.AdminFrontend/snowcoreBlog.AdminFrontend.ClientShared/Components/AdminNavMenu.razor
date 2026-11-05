@@ -1,0 +1,79 @@
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+@using Microsoft.FluentUI.AspNetCore.Components
+
+@inject NavigationManager Navigation
+
+<nav class="admin-nav">
+    <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Overview</div>
+        <a class="admin-nav-item @(IsActive("") ? "active" : null)" href="@(Href(""))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.Home())" />
+            <span>Dashboard</span>
+        </a>
+    </div>
+
+    <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Content</div>
+        <a class="admin-nav-item @(IsActive("readers") ? "active" : null)" href="@(Href("readers"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.PersonAccounts())" />
+            <span>Readers</span>
+        </a>
+        <a class="admin-nav-item @(IsActive("authors") ? "active" : null)" href="@(Href("authors"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.PeopleTeam())" />
+            <span>Authors</span>
+        </a>
+        <a class="admin-nav-item @(IsActive("articles") ? "active" : null)" href="@(Href("articles"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.DocumentText())" />
+            <span>Articles</span>
+        </a>
+        <a class="admin-nav-item @(IsActive("documents") ? "active" : null)" href="@(Href("documents"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.FolderOpen())" />
+            <span>Documents</span>
+        </a>
+    </div>
+
+    <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Platform</div>
+        <a class="admin-nav-item @(IsActive("notifications") ? "active" : null)" href="@(Href("notifications"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.Alert())" />
+            <span>Notifications</span>
+        </a>
+        <a class="admin-nav-item @(IsActive("access-restrictions") ? "active" : null)" href="@(Href("access-restrictions"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.ShieldTask())" />
+            <span>Access Restrictions</span>
+        </a>
+    </div>
+
+    <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Administration</div>
+        <a class="admin-nav-item @(IsActive("admins") ? "active" : null)" href="@(Href("admins"))">
+            <FluentIcon Value="@(new Icons.Regular.Size20.PersonSettings())" />
+            <span>Admins</span>
+        </a>
+    </div>
+</nav>
+
+@code
+{
+    private string CurrentRelativePath()
+    {
+        var uri = new Uri(Navigation.Uri);
+        var path = uri.AbsolutePath.TrimEnd('/');
+        var basePath = uri.GetLeftPart(UriPartial.Authority);
+        // Under the gateway the app is served from /admin — strip it if present.
+        if (path.StartsWith("/admin", StringComparison.OrdinalIgnoreCase))
+        {
+            path = path["/admin".Length..];
+        }
+        return path.Trim('/');
+    }
+
+    private bool IsActive(string page)
+    {
+        var current = CurrentRelativePath();
+        return page.Length == 0 ? current.Length == 0 : current == page;
+    }
+
+    private string Href(string page)
+        => page.Length == 0 ? "" : page;
+}

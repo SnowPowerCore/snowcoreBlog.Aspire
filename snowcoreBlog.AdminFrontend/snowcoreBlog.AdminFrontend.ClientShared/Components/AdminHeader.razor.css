@@ -1,0 +1,37 @@
+.admin-header {
+    background: var(--neutral-layer-2);
+    border-bottom: 1px solid var(--neutral-stroke-divider-rest, rgba(255,255,255,.08));
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.admin-header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 10px 32px;
+}
+
+.admin-header-title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.admin-header-subtitle {
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--neutral-foreground-hint);
+}
+
+.admin-identity-email {
+    color: var(--neutral-foreground-hint);
+    font-size: 13px;
+    max-width: 260px;
+}
+
+::deep .cursor-pointer { cursor: pointer; }
+
+@media (max-width: 991.98px) {
+    .admin-header-inner { padding: 10px 16px; }
+}

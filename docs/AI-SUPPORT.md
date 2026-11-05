@@ -277,3 +277,53 @@ If you’re using an AI agent to implement a feature request, these guardrails r
 - Keep YARP routes and auth policies explicit (don’t default to anonymous).
 - Don’t bypass PublicApi when a change is meant to be consumed by other services or the frontend.
 - Keep the three PublicApi copies in sync unless explicitly scoped otherwise.
+
+---
+
+## 10) Durable request persistence (tag-driven claim → checkpoint → replay)
+
+Endpoints opt in **only** by declaring `Tags(ApiTagConstants.Persist)` (FE-level tag). The shared
+`Endpoints.Configurator` in each service's `FastEndpointsConfigurationExtensions` attaches
+`PersistRequestPreProcessor` / `PersistRequestPostProcessor` for tagged endpoints (same pattern as
+`RequireCaptchaVerification` → `AltchaVerificationProcessor`).
+
+### Flow
+1. **Claim (pre-processor)** — requires client `Idempotency-Key` (400 without it). Body is read,
+   SHA-256 hashed, and the `PersistedRequestEntity` claim is committed in an **independent Marten
+   session** before any business logic. Claim failure ⇒ 503 (unpersisted requests never execute).
+   Response body is captured via stream swap (SSE endpoints skip capture; `IsStreamingResponse`).
+2. **Duplicate short-circuit** — same key: hash mismatch ⇒ 202 Conflict; Succeeded/Failed ⇒ 200
+   informative (`IdempotencyRequestStatusDto`, stored business response is never returned); fresh
+   Processing lease ⇒ 202 InProgress; stale lease / Persisted / due RetryNeeded ⇒ atomic takeover
+   (`TryTakeOverAsync`: Marten patch+increment in one SaveChanges, verified by re-read) and the
+   request **resumes from the highest contiguous step checkpoint**.
+3. **Step checkpoints** — steps marked `[CheckpointedStep]` (in-repo AspectInjector aspect) report entry/completion to `StepCheckpointCoordinator`. Contexts
+   implement `IStepCheckpointState` (typed snapshots, registered in the service's
+   `*CheckpointJsonContext` `JsonSerializerContext` — AOT-safe). On resume the context is hydrated
+   in place from the last snapshot and completed steps are skipped by the aspect (calls `next`
+   directly).
+4. **Completion (post-processor)** — outcome is classified (2xx Succeeded / 4xx Failed /
+   5xx+429 RetryNeeded with backoff) and the marker is durable **before** response bytes flush.
+   Retention: plain first-attempt finishes purge to tombstone stubs; recovered requests keep full
+   records for audit.
+5. **Recovery** — `PersistRequestRecoveryWorker` polls (aged Persisted / due RetryNeeded / expired
+   lease), takes over, and re-dispatches via HTTP loopback (`ReplayRequestDispatcher`) with a
+   fresh antiforgery token and `IReplayAuthenticationProvider` re-auth (ReadersManagement:
+   refresh-token rotation; rejection ⇒ Failed + manual).
+
+### Wiring a new service
+- `AddMarten(options => { ...; options.AddPersistRequestDocuments(); })` (claims + checkpoints +
+  unique idempotency index)
+- `services.AddPersistRequestProcessing()` (+ per-service `IJsonTypeInfoResolver` checkpoint
+  context and `IReplayAuthenticationProvider` override)
+- merge `ep.AttachPersistRequestProcessors()` into `c.Endpoints.Configurator`
+- add `PersistHeaderProcessor` to Swagger `OperationProcessors`
+- tag endpoints with `Tags(ApiTagConstants.Persist)`; mark checkpointable steps `[CheckpointedStep]`
+
+### Known limits
+- The single in-flight (crashed) step may still duplicate its external side effects on resume.
+- `MinimalStepifiedSystem` resolves steps once per pipeline property from one captured scope —
+  known behavior, documented, not fixed (coordinator resolves per-operation via
+  `IServiceScopeFactory`).
+- MassTransit publishes are not covered by an outbox; a replay may re-publish events.
+- Requires Postgres `synchronous_commit=on` (default) for the durability contract.

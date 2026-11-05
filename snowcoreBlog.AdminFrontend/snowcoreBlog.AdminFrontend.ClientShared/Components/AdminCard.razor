@@ -1,0 +1,38 @@
+<FluentCard Class="@CardClass" Style="@(Style ?? string.Empty)" Padding="20">
+    @if (!string.IsNullOrEmpty(Title) || Actions is not default(RenderFragment))
+    {
+        <div class="admin-card-header">
+            @if (!string.IsNullOrEmpty(Title))
+            {
+                <span class="admin-card-title">@Title</span>
+            }
+            @if (Actions is not default(RenderFragment))
+            {
+                <div class="admin-card-actions">@Actions</div>
+            }
+        </div>
+    }
+    <div class="admin-card-body">
+        @ChildContent
+    </div>
+</FluentCard>
+
+@code
+{
+    private string? CardClass => $"admin-card { Class ?? string.Empty }";
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public string? Style { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+}

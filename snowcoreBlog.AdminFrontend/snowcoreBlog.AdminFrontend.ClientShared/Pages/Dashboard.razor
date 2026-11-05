@@ -1,0 +1,62 @@
+@page "/"
+
+@using Icons = Microsoft.FluentUI.AspNetCore.Components.Icons
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<PageHeader Title="Dashboard"
+            Subtitle="Operate readers, authors, content and platform safeguards of snowcore's Blog from a single place." />
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+    <div class="col">
+        <StatCard Label="Readers" Description="Reader accounts and sessions" Href="readers" Tone="StatTone.Accent">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.PersonAccounts())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Authors" Description="Author accounts and approvals" Href="authors" Tone="StatTone.Accent">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.PeopleTeam())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Articles" Description="Moderate and curate published content" Href="articles" Tone="StatTone.Success">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.DocumentText())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Documents" Description="Document storage and lifecycle" Href="documents" Tone="StatTone.Success">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.FolderOpen())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Notifications" Description="Service notification broadcasts" Href="notifications" Tone="StatTone.Warning">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.Alert())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Access Restrictions" Description="Gateway rules and response templates" Href="access-restrictions" Tone="StatTone.Danger">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.ShieldTask())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Admins" Description="Admin accounts and invitations" Href="admins" Tone="StatTone.Neutral">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.PersonSettings())" /></Icon>
+        </StatCard>
+    </div>
+    <div class="col">
+        <StatCard Label="Sign in" Description="Passwordless link-based admin access" Href="login" Tone="StatTone.Neutral">
+            <Icon><FluentIcon Value="@(new Icons.Regular.Size20.Person())" /></Icon>
+        </StatCard>
+    </div>
+</div>
+
+<AdminCard Title="How admin access works">
+    <p class="mb-2">
+        Admins cannot self-register. Every admin — except the first one — is invited by an existing admin
+        and proceeds via an emailed, single-use link. Sign-in itself is passwordless: request a one-time
+        link from the <a href="login">sign-in page</a>.
+    </p>
+    <p class="mb-0 text-body-secondary small">
+        Manage invitations and accounts on the <a href="admins">Admins</a> page.
+    </p>
+</AdminCard>

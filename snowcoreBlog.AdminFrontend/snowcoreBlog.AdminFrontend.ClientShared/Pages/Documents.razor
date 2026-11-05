@@ -1,0 +1,153 @@
+@page "/documents"
+
+@inject IApizrManager<IAdminDocumentsApi> DocumentsAdmin
+
+<PageTitle>Documents — Admin</PageTitle>
+
+<PageHeader Title="Documents"
+            Subtitle="Stored documents (backend-documents) — content-addressed by SHA-256; duplicates are deduplicated on upload." />
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <FluentTextField @bind-Value="_search" Placeholder="Search file name…" Style="min-width: 260px;" />
+    <FluentTextField @bind-Value="_category" Placeholder="Category…" Style="min-width: 160px;" />
+    <FluentSelect TOption="string" @bind-Value="_status" Style="min-width: 180px;">
+        <FluentOption TOption="string" Value="@string.Empty" Selected="@(_status == string.Empty)">Any status</FluentOption>
+        <FluentOption TOption="string" Value="Uploaded" Selected="@(_status == "Uploaded")">Uploaded</FluentOption>
+        <FluentOption TOption="string" Value="Processing" Selected="@(_status == "Processing")">Processing</FluentOption>
+        <FluentOption TOption="string" Value="Processed" Selected="@(_status == "Processed")">Processed</FluentOption>
+        <FluentOption TOption="string" Value="Rejected" Selected="@(_status == "Rejected")">Rejected</FluentOption>
+    </FluentSelect>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = LoadAsync(1))">Search</FluentButton>
+    <FluentSpacer />
+    @if (_loading)
+    {
+        <FluentProgressRing Style="width: 24px; height: 24px;" />
+    }
+</div>
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+<table class="table table-hover align-middle mb-0">
+    <thead>
+        <tr>
+            <th>File name</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Size</th>
+            <th>Content type</th>
+            <th>Checksum</th>
+            <th>Uploaded (UTC)</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var document in _items)
+        {
+            var current = document;
+            <tr>
+                <td>@current.FileName</td>
+                <td>@current.Category</td>
+                <td><StatusBadge Text="@current.Status.ToString()" Tone="@StatusTone(current.Status)" /></td>
+                <td>@(current.SizeBytes / 1024) KB</td>
+                <td class="admin-monospace">@current.ContentType</td>
+                <td class="admin-monospace" title="@current.Checksum">@current.Checksum[..Math.Min(12, current.Checksum.Length)]…</td>
+                <td>@current.UploadedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td class="col-actions">
+                    <FluentAnchor Href="@($"/api/documents/download/{current.Id}/v1")" Target="_blank" Appearance="Appearance.Neutral">Download</FluentAnchor>
+                    @if (_confirmDeleteId == current.Id)
+                    {
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteAsync(current.Id))">Confirm delete</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = null)">Cancel</FluentButton>
+                    }
+                    else
+                    {
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = current.Id)">Delete…</FluentButton>
+                    }
+                </td>
+            </tr>
+        }
+        @if (!_loading && _items.Count == 0)
+        {
+            <tr><td colspan="8" class="text-center text-body-secondary py-4">No documents found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_page <= 1 || _loading)" OnClick="@(() => _ = LoadAsync(_page - 1))">← Previous</FluentButton>
+    <FluentLabel>Page @_page</FluentLabel>
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_items.Count < _pageSize || _loading)" OnClick="@(() => _ = LoadAsync(_page + 1))">Next →</FluentButton>
+</div>
+
+@code
+{
+    private readonly int _pageSize = 25;
+
+    private List<DocumentAdminDto> _items = [];
+    private List<string> _errors = [];
+    private string _search = string.Empty;
+    private string _category = string.Empty;
+    private string _status = string.Empty;
+    private bool _loading;
+    private int _page = 1;
+    private Guid? _confirmDeleteId;
+
+    protected override void OnInitialized() => _ = LoadAsync(1);
+
+    private static BadgeTone StatusTone(DocumentStatusDto status) => status switch
+    {
+        DocumentStatusDto.Processed => BadgeTone.Success,
+        DocumentStatusDto.Processing => BadgeTone.Info,
+        DocumentStatusDto.Rejected => BadgeTone.Danger,
+        _ => BadgeTone.Neutral,
+    };
+
+    private async Task LoadAsync(int page)
+    {
+        _loading = true;
+        _errors = [];
+        _confirmDeleteId = null;
+        StateHasChanged();
+
+        var status = Enum.TryParse<DocumentStatusDto>(_status, out var parsed) && !string.IsNullOrEmpty(_status)
+            ? (DocumentStatusDto?)parsed
+            : null;
+        var statusValue = status.HasValue ? (int?)status.Value : null;
+
+        using var response = await DocumentsAdmin.ExecuteAsync((options, api) =>
+            api.SearchDocuments(page, _pageSize, _search, _category, statusValue, options));
+        var data = response.ToData<List<DocumentAdminDto>>(out var errors);
+        if (data is not default(List<DocumentAdminDto>))
+        {
+            _items = data;
+            _page = page;
+        }
+        else
+        {
+            _items = [];
+            _errors = errors;
+        }
+
+        _loading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task DeleteAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await DocumentsAdmin.ExecuteAsync((options, api) => api.DeleteDocument(id, options));
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+        await LoadAsync(_page);
+    }
+}

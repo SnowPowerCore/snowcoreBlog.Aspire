@@ -1,0 +1,235 @@
+@using snowcoreBlog.AdminFrontend.ClientShared.Models
+
+@page "/articles"
+
+@inject IApizrManager<IAdminArticlesApi> ArticlesAdmin
+
+<PageTitle>Articles — Admin</PageTitle>
+
+<PageHeader Title="Articles"
+            Subtitle="Article moderation (backend-articles): search, inspect the latest content snapshot, publish/unpublish, soft-delete with snapshots." />
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <FluentTextField @bind-Value="_search" Placeholder="Search title or slug…" Style="min-width: 260px;" />
+    <FluentTextField @bind-Value="_tag" Placeholder="Filter by tag…" Style="min-width: 160px;" />
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = LoadAsync(1))">Search</FluentButton>
+    <FluentSpacer />
+    @if (_loading)
+    {
+        <FluentProgressRing Style="width: 24px; height: 24px;" />
+    }
+</div>
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+<table class="table table-hover align-middle mb-0">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Category</th>
+            <th>Tags</th>
+            <th>Status</th>
+            <th>Published at (UTC)</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var article in _items)
+        {
+            var current = article;
+            <tr class="@(current.Id == _selectedId ? "row-selected" : null)">
+                <td><FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => _ = SelectAsync(current.Id))">@current.Title</FluentButton></td>
+                <td class="admin-monospace">@current.Slug</td>
+                <td>@(current.Category ?? "—")</td>
+                <td>@string.Join(", ", current.Tags)</td>
+                <td>
+                    @if (current.IsPublished)
+                    {
+                        <StatusBadge Text="Published" Tone="BadgeTone.Success" />
+                    }
+                    else
+                    {
+                        <StatusBadge Text="Draft" Tone="BadgeTone.Neutral" />
+                    }
+                </td>
+                <td>@(current.PublishedAt?.ToString("yyyy-MM-dd HH:mm") ?? "—")</td>
+                <td class="col-actions">
+                    @if (_confirmDeleteId == current.Id)
+                    {
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteAsync(current.Id))">Confirm delete</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = null)">Cancel</FluentButton>
+                    }
+                    else
+                    {
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _ = TogglePublicationAsync(current))">
+                            @(current.IsPublished ? "Unpublish" : "Publish")
+                        </FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = current.Id)">Delete…</FluentButton>
+                    }
+                </td>
+            </tr>
+        }
+        @if (!_loading && _items.Count == 0)
+        {
+            <tr><td colspan="7" class="text-center text-body-secondary py-4">No articles found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_page <= 1 || _loading)" OnClick="@(() => _ = LoadAsync(_page - 1))">← Previous</FluentButton>
+    <FluentLabel>Page @_page</FluentLabel>
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_items.Count < _pageSize || _loading)" OnClick="@(() => _ = LoadAsync(_page + 1))">Next →</FluentButton>
+</div>
+
+@if (_detail is not default(ArticleAdminDetailDto))
+{
+    <AdminCard Class="mt-4" Title="Article details">
+        <FluentStack Orientation="Orientation.Vertical" HorizontalGap="8">
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="12" VerticalAlignment="VerticalAlignment.Center">
+                <FluentLabel Typo="Typography.H3">@_detail.Title</FluentLabel>
+                <StatusBadge Text="@(_detail.IsPublished ? $"Published {_detail.PublishedAt:yyyy-MM-dd HH:mm}" : "Draft")"
+                    Tone="@(_detail.IsPublished ? BadgeTone.Success : BadgeTone.Neutral)" />
+                <FluentSpacer />
+                <FluentSwitch Label="Published" @bind-Value="_detailPublished" OnChange="@(() => _ = SavePublicationAsync())" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="24">
+                <FluentLabel>Slug: <span class="admin-monospace">@_detail.Slug</span></FluentLabel>
+                <FluentLabel>Category: @(_detail.Category ?? "—")</FluentLabel>
+                <FluentLabel>Tags: @string.Join(", ", _detail.Tags)</FluentLabel>
+                <FluentLabel>Snapshot: @_detail.SnapshotModifiedAt.ToString("yyyy-MM-dd HH:mm") UTC</FluentLabel>
+            </FluentStack>
+            @if (!string.IsNullOrWhiteSpace(_detail.Excerpt))
+            {
+                <FluentLabel>@_detail.Excerpt</FluentLabel>
+            }
+            <FluentLabel Typo="Typography.Body">Markdown (latest snapshot):</FluentLabel>
+            <pre class="admin-markdown admin-monospace mb-0">@_detail.Markdown</pre>
+        </FluentStack>
+    </AdminCard>
+}
+
+@code
+{
+    private readonly int _pageSize = 25;
+
+    private List<ArticleAdminDto> _items = [];
+    private List<string> _errors = [];
+    private string _search = string.Empty;
+    private string _tag = string.Empty;
+    private bool _loading;
+    private int _page = 1;
+    private Guid? _confirmDeleteId;
+    private Guid? _selectedId;
+    private ArticleAdminDetailDto? _detail;
+    private bool _detailPublished;
+
+    protected override void OnInitialized() => _ = LoadAsync(1);
+
+    private async Task LoadAsync(int page)
+    {
+        _loading = true;
+        _errors = [];
+        _confirmDeleteId = null;
+        StateHasChanged();
+
+        using var response = await ArticlesAdmin.ExecuteAsync((options, api) =>
+            api.SearchArticles(page, _pageSize, _search, _tag, options));
+        var data = response.ToData<List<ArticleAdminDto>>(out var errors);
+        if (data is not default(List<ArticleAdminDto>))
+        {
+            _items = data;
+            _page = page;
+        }
+        else
+        {
+            _items = [];
+            _errors = errors;
+        }
+
+        _loading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SelectAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await ArticlesAdmin.ExecuteAsync((options, api) => api.GetArticle(id, options));
+        var detail = response.ToData<ArticleAdminDetailDto>(out var errors);
+        if (detail is not default(ArticleAdminDetailDto))
+        {
+            _selectedId = id;
+            _detail = detail;
+            _detailPublished = _detail.IsPublished;
+        }
+        else
+        {
+            _errors = errors;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task TogglePublicationAsync(ArticleAdminDto article)
+    {
+        _errors = [];
+        using var response = await ArticlesAdmin.ExecuteAsync((options, api) => api.SetPublication(
+            article.Id, new SetArticlePublicationDto { Publish = !article.IsPublished }, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        if (_selectedId == article.Id)
+        {
+            await SelectAsync(article.Id);
+        }
+        await LoadAsync(_page);
+    }
+
+    private async Task SavePublicationAsync()
+    {
+        if (_detail is default(ArticleAdminDetailDto))
+        {
+            return;
+        }
+        _errors = [];
+        using var response = await ArticlesAdmin.ExecuteAsync((options, api) => api.SetPublication(
+            _detail.Id, new SetArticlePublicationDto { Publish = _detailPublished }, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await LoadAsync(_page);
+        if (_detail is not default(ArticleAdminDetailDto))
+        {
+            await SelectAsync(_detail.Id);
+        }
+    }
+
+    private async Task DeleteAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await ArticlesAdmin.ExecuteAsync((options, api) => api.DeleteArticle(id, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        if (_selectedId == id)
+        {
+            _selectedId = null;
+            _detail = null;
+        }
+        await LoadAsync(_page);
+    }
+}

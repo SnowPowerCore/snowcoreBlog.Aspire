@@ -1,0 +1,287 @@
+@using snowcoreBlog.AdminFrontend.ClientShared.Utilities
+
+@page "/admins"
+
+@inject IApizrManager<IAdminsApi> AdminsAdmin
+@inject NavigationManager Navigation
+
+<PageTitle>Admins — Admin</PageTitle>
+
+<PageHeader Title="Administrators"
+            Subtitle="Admin account management. Admins cannot self-register: every admin (except the first-ever one) is invited by an existing admin — the inviter reference is enforced on the database level.">
+    <Actions>
+        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _ = LogoutAsync())">Sign out</FluentButton>
+    </Actions>
+</PageHeader>
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+@if (AdminApiErrors.IsUnauthorizedOrForbidden(_errors))
+{
+    <FluentMessageBar Intent="MessageIntent.Warning" Heading="Not signed in">
+        <FluentAnchor Href="login">Request a sign-in link</FluentAnchor>
+    </FluentMessageBar>
+}
+
+<h2 class="fs-5 fw-semibold mb-3">Admin accounts</h2>
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <FluentTextField @bind-Value="_search" Placeholder="Search email or nickname…" Style="min-width: 280px;" />
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = LoadAsync(1))">Search</FluentButton>
+    @if (_loading)
+    {
+        <FluentProgressRing Style="width: 24px; height: 24px;" />
+    }
+</div>
+
+<table class="table table-hover align-middle mb-0">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nickname</th>
+            <th>Invited by</th>
+            <th>Invited at (UTC)</th>
+            <th>Status</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var admin in _items)
+        {
+            var current = admin;
+            <tr>
+                <td>@current.Email</td>
+                <td>@(string.IsNullOrEmpty(current.NickName) ? "—" : current.NickName)</td>
+                <td class="admin-monospace" title="@current.InvitedByAdminId">
+                    @(current.InvitedByAdminId is Guid inviter ? Short(inviter) : "— first ever admin")
+                </td>
+                <td>@current.InvitedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    @if (current.IsActive)
+                    {
+                        <StatusBadge Text="Active" Tone="BadgeTone.Success" />
+                    }
+                    else
+                    {
+                        <StatusBadge Text="Inactive" Tone="BadgeTone.Neutral" />
+                    }
+                </td>
+                <td class="col-actions">
+                    @if (_confirmDeleteId == current.Id)
+                    {
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteAsync(current.Id))">Confirm delete</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = null)">Cancel</FluentButton>
+                    }
+                    else
+                    {
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = current.Id)">Delete…</FluentButton>
+                    }
+                </td>
+            </tr>
+        }
+        @if (!_loading && _items.Count == 0)
+        {
+            <tr><td colspan="6" class="text-center text-body-secondary py-4">No admin accounts found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_page <= 1 || _loading)" OnClick="@(() => _ = LoadAsync(_page - 1))">← Previous</FluentButton>
+    <FluentLabel>Page @_page</FluentLabel>
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_items.Count < _pageSize || _loading)" OnClick="@(() => _ = LoadAsync(_page + 1))">Next →</FluentButton>
+</div>
+
+<h2 class="fs-5 fw-semibold mt-4 mb-3">Invitations</h2>
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _inviteFormOpen = true)">＋ Invite new admin</FluentButton>
+</div>
+
+@if (_inviteFormOpen)
+{
+    <AdminCard Class="w-100" Style="max-width: 560px;" Title="Invite a new admin">
+        <div class="admin-form-grid">
+            <FluentTextField Label="Email *" @bind-Value="_inviteEmail" Class="span-all" />
+            <FluentTextField Label="Nickname" @bind-Value="_inviteNickName" Class="span-all" />
+        </div>
+        <div class="d-flex gap-2">
+            <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = SendInviteAsync())">Send invitation</FluentButton>
+            <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _inviteFormOpen = false)">Cancel</FluentButton>
+        </div>
+    </AdminCard>
+}
+
+<table class="table table-hover align-middle mb-0" style="margin-top: 12px;">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nickname</th>
+            <th>Created (UTC)</th>
+            <th>Expires (UTC)</th>
+            <th>Status</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var invite in _invites)
+        {
+            var current = invite;
+            <tr>
+                <td>@current.Email</td>
+                <td>@(string.IsNullOrEmpty(current.NickName) ? "—" : current.NickName)</td>
+                <td>@current.CreatedAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@current.ExpiresAtUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    @if (current.AcceptedAtUtc is not null)
+                    {
+                        <StatusBadge Text="Accepted" Tone="BadgeTone.Success" />
+                    }
+                    else if (DateTime.UtcNow >= current.ExpiresAtUtc)
+                    {
+                        <StatusBadge Text="Expired" Tone="BadgeTone.Danger" />
+                    }
+                    else
+                    {
+                        <StatusBadge Text="Pending" Tone="BadgeTone.Info" />
+                    }
+                </td>
+                <td class="col-actions">
+                    @if (current.AcceptedAtUtc is null)
+                    {
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _ = RevokeAsync(current.Id))">Revoke</FluentButton>
+                    }
+                </td>
+            </tr>
+        }
+        @if (_invites.Count == 0)
+        {
+            <tr><td colspan="6" class="text-center text-body-secondary py-4">No invitations yet.</td></tr>
+        }
+    </tbody>
+</table>
+
+@code
+{
+    private readonly int _pageSize = 25;
+
+    private List<AdminDto> _items = [];
+    private List<AdminInviteDto> _invites = [];
+    private List<string> _errors = [];
+    private string _search = string.Empty;
+    private bool _loading;
+    private int _page = 1;
+    private Guid? _confirmDeleteId;
+    private bool _inviteFormOpen;
+    private string _inviteEmail = string.Empty;
+    private string _inviteNickName = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        _ = LoadAsync(1);
+        _ = LoadInvitesAsync();
+    }
+
+    private static string Short(Guid id) => id.ToString()[..8];
+
+    private async Task LoadAsync(int page)
+    {
+        _loading = true;
+        _errors = [];
+        _confirmDeleteId = null;
+        StateHasChanged();
+
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) =>
+            api.SearchAdmins(page, _pageSize, _search, options));
+        var data = response.ToData<List<AdminDto>>(out var errors);
+        if (data is not default(List<AdminDto>))
+        {
+            _items = data;
+            _page = page;
+        }
+        else
+        {
+            _items = [];
+            _errors = errors;
+        }
+
+        _loading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadInvitesAsync()
+    {
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.GetInvites(options));
+        _invites = response.ToData<List<AdminInviteDto>>(out var errors) ?? [];
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task DeleteAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.DeleteAdmin(id, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await LoadAsync(_page);
+    }
+
+    private async Task SendInviteAsync()
+    {
+        _errors = [];
+
+        if (string.IsNullOrWhiteSpace(_inviteEmail))
+        {
+            _errors = ["Email is required."];
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.CreateInvite(
+            new CreateAdminInviteDto { Email = _inviteEmail.Trim(), NickName = _inviteNickName.Trim() }, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count == 0)
+        {
+            _inviteFormOpen = false;
+            _inviteEmail = string.Empty;
+            _inviteNickName = string.Empty;
+            await LoadInvitesAsync();
+        }
+        else
+        {
+            _errors = errors;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task RevokeAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.RevokeInvite(id, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await LoadInvitesAsync();
+    }
+
+    private async Task LogoutAsync()
+    {
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.Logout(options));
+        response.ToData<object>(out _);
+        Navigation.NavigateTo("login", forceLoad: true);
+    }
+}

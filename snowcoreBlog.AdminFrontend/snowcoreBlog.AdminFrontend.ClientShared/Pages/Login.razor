@@ -1,0 +1,134 @@
+@page "/login"
+
+@inject IApizrManager<IAdminsApi> AdminsAdmin
+@inject NavigationManager Navigation
+
+<PageTitle>Sign in — Admin</PageTitle>
+
+<PageHeader Title="Admin sign-in"
+            Subtitle="Admins sign in via a single-use emailed link — there is no password and no self-registration. New admins are invited by an existing admin." />
+
+@if (_signedIn is not default(AdminDto))
+{
+    <FluentMessageBar Intent="MessageIntent.Success" Heading="Signed in">
+        Welcome, @_signedIn.Email. <FluentAnchor Href="" Appearance="Appearance.Neutral">Go to dashboard</FluentAnchor>
+    </FluentMessageBar>
+}
+else
+{
+    <div class="auth-panel">
+        <FluentCard Padding="20">
+        <FluentStack Orientation="Orientation.Vertical" HorizontalGap="12">
+            @if (_confirmMode)
+            {
+                <FluentLabel Typo="Typography.H3">Confirm sign-in link</FluentLabel>
+                <FluentLabel>
+                    @if (_resolving)
+                    {
+                        <FluentProgressRing Style="width: 24px; height: 24px;" />
+                    }
+                    else
+                    {
+                        <span>Confirming your single-use sign-in link…</span>
+                    }
+                </FluentLabel>
+            }
+            else
+            {
+                <FluentLabel Typo="Typography.H3">Request a sign-in link</FluentLabel>
+                <FluentTextField Label="Email" @bind-Value="_email" Style="min-width: 320px;" />
+                <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="8">
+                    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = RequestLinkAsync())">Email me a sign-in link</FluentButton>
+                </FluentStack>
+                <FluentLabel Typo="Typography.Body">
+                    Have an invite token instead? Open the link from your invitation email.
+                </FluentLabel>
+            }
+            @if (_errors.Count > 0)
+            {
+                <FluentMessageBar Intent="MessageIntent.Error">
+                    @foreach (var error in _errors)
+                    {
+                        <div>@error</div>
+                    }
+                </FluentMessageBar>
+            }
+            @if (_infoSent)
+            {
+                <FluentMessageBar Intent="MessageIntent.Success">
+                    If that email belongs to an active admin, a single-use sign-in link is on its way.
+                </FluentMessageBar>
+            }
+        </FluentStack>
+        </FluentCard>
+    </div>
+}
+
+@code
+{
+    private string _email = string.Empty;
+    private List<string> _errors = [];
+    private bool _confirmMode;
+    private bool _resolving;
+    private bool _infoSent;
+    private AdminDto? _signedIn;
+
+    protected override void OnInitialized()
+    {
+        var query = new Uri(Navigation.Uri).Query.TrimStart('?');
+        var token = query
+            .Split('&', StringSplitOptions.RemoveEmptyEntries)
+            .Select(static pair => pair.Split('=', 2))
+            .FirstOrDefault(static pair => pair.Length == 2 && pair[0] == "token")?[1];
+
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            _confirmMode = true;
+            _ = ConfirmAsync(token);
+        }
+    }
+
+    private async Task RequestLinkAsync()
+    {
+        _errors = [];
+        _infoSent = false;
+
+        if (string.IsNullOrWhiteSpace(_email))
+        {
+            _errors = ["Email is required."];
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) =>
+            api.RequestLoginLink(new RequestAdminLoginLinkDto { Email = _email.Trim() }, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        else
+        {
+            _infoSent = true;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ConfirmAsync(string token)
+    {
+        _resolving = true;
+        _errors = [];
+        await InvokeAsync(StateHasChanged);
+
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) =>
+            api.ConfirmLogin(new ConfirmAdminLoginDto { Token = token }, options));
+        _signedIn = response.ToData<AdminDto>(out var errors);
+        if (_signedIn is not default(AdminDto))
+        {
+            _errors = errors;
+        }
+
+        _resolving = false;
+        await InvokeAsync(StateHasChanged);
+    }
+}

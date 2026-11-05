@@ -1,0 +1,100 @@
+@page "/invite"
+
+@inject IApizrManager<IAdminsApi> AdminsAdmin
+@inject NavigationManager Navigation
+
+<PageTitle>Accept admin invitation — Admin</PageTitle>
+
+<PageHeader Title="Accept admin invitation"
+            Subtitle="Invitations are issued by existing admins only — there is no self-registration path." />
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+@if (_accepted is not default(AdminDto))
+{
+    <FluentMessageBar Intent="MessageIntent.Success" Heading="Invitation accepted">
+        Welcome aboard, @_accepted.NickName! You are signed in. <FluentAnchor Href="" Appearance="Appearance.Neutral">Go to dashboard</FluentAnchor>
+    </FluentMessageBar>
+}
+else if (_resolution is not default(AdminInviteResolutionDto))
+{
+    <div class="auth-panel auth-panel-wide">
+        <FluentCard Padding="20">
+        <FluentStack Orientation="Orientation.Vertical" HorizontalGap="12">
+            <FluentLabel Typo="Typography.H3">You are invited as an administrator</FluentLabel>
+            <FluentStack Orientation="Orientation.Vertical" HorizontalGap="4">
+                <FluentLabel><b>Email:</b> @_resolution.Email</FluentLabel>
+                <FluentLabel><b>Suggested nickname:</b> @(_resolution.NickName is string n && n.Length > 0 ? n : "—")</FluentLabel>
+                <FluentLabel><b>Expires:</b> @_resolution.ExpiresAtUtc.ToString("yyyy-MM-dd HH:mm") UTC</FluentLabel>
+            </FluentStack>
+            <FluentTextField Label="Nickname" @bind-Value="_nickName" Style="min-width: 320px;" />
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalGap="8">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = AcceptAsync())">Accept invitation & sign in</FluentButton>
+            </FluentStack>
+        </FluentStack>
+        </FluentCard>
+    </div>
+}
+else
+{
+    <FluentProgressRing Style="width: 24px; height: 24px;" />
+}
+
+@code
+{
+    private string _nickName = string.Empty;
+    private List<string> _errors = [];
+    private AdminInviteResolutionDto? _resolution;
+    private AdminDto? _accepted;
+
+    [SupplyParameterFromQuery]
+    public string? Token { get; set; }
+
+    protected override void OnInitialized() => _ = ResolveAsync();
+
+    private async Task ResolveAsync()
+    {
+        _errors = [];
+
+        if (string.IsNullOrWhiteSpace(Token))
+        {
+            _errors = ["Missing invitation token."];
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.ResolveInvite(Token!, options));
+        _resolution = response.ToData<AdminInviteResolutionDto>(out var errors);
+        if (_resolution is not default(AdminInviteResolutionDto))
+        {
+            _nickName = _resolution.NickName;
+        }
+        else
+        {
+            _errors = errors;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task AcceptAsync()
+    {
+        _errors = [];
+
+        using var response = await AdminsAdmin.ExecuteAsync((options, api) => api.AcceptInvite(
+            new AcceptAdminInviteDto { Token = Token!, NickName = _nickName }, options));
+        _accepted = response.ToData<AdminDto>(out var errors);
+        if (_accepted is not default(AdminDto))
+        {
+            _errors = errors;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+}

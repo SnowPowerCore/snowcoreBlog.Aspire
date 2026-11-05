@@ -23,12 +23,14 @@
   <PropertyGroup>
     <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Backend\**</DefaultItemExcludes>
     <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Frontend\**</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.AdminFrontend\**</DefaultItemExcludes>
     <DefaultItemExcludes>$(DefaultItemExcludes);snowcoreBlog.Console\**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\Articles\snowcoreBlog.Backend.Articles.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\AuthorsManagement\snowcoreBlog.Backend.AuthorsManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\ReadersManagement\snowcoreBlog.Backend.ReadersManagement.csproj" />
+    <ProjectReference Include="snowcoreBlog.Backend\BusinessServices\AdminsManagement\snowcoreBlog.Backend.AdminsManagement.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Email\snowcoreBlog.Backend.Email.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\AspireYarpGateway\snowcoreBlog.Backend.AspireYarpGateway.csproj" IsAspireProjectResource="false" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\ApiAccessRestrictions\snowcoreBlog.Backend.ApiAccessRestrictions.csproj" />
@@ -37,6 +39,7 @@
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\ServiceNotifications\snowcoreBlog.Backend.ServiceNotifications.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Documents\snowcoreBlog.Backend.Documents.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
+    <ProjectReference Include="snowcoreBlog.AdminFrontend\Host\snowcoreBlog.AdminFrontend.Host.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,15 @@
+<Router AppAssembly="typeof(Program).Assembly" AdditionalAssemblies="[
+        typeof(_Imports).Assembly,
+        typeof(snowcoreBlog.AdminFrontend.ClientShared._Imports).Assembly,
+    ]">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(ClientShared.Layout.AdminLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(ClientShared.Layout.AdminLayout)">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>

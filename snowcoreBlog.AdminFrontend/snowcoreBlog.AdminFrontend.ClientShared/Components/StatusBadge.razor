@@ -1,0 +1,20 @@
+@using snowcoreBlog.AdminFrontend.ClientShared.Models
+<span class="badge @($"badge-{Tone.ToString().ToLowerInvariant()}")">
+    @if (ShowDot)
+    {
+        <span class="badge-dot"></span>
+    }
+    @Text
+</span>
+
+@code
+{
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public BadgeTone Tone { get; set; } = BadgeTone.Neutral;
+
+    [Parameter]
+    public bool ShowDot { get; set; } = true;
+}

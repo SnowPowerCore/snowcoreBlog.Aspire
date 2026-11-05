@@ -1,0 +1,297 @@
+@using snowcoreBlog.AdminFrontend.ClientShared.Models
+
+@page "/notifications"
+
+@inject IApizrManager<IAdminNotificationsApi> NotificationsAdmin
+
+<PageTitle>Notifications — Admin</PageTitle>
+
+<PageHeader Title="Notifications"
+            Subtitle="Technical top-bar notifications (backend-servicenotifications): create, edit, activate/deactivate and delete banner notifications." />
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = BeginCreateAsync())">＋ New notification</FluentButton>
+    <FluentSpacer />
+    @if (_loading)
+    {
+        <FluentProgressRing Style="width: 24px; height: 24px;" />
+    }
+</div>
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+<table class="table table-hover align-middle mb-0">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Active</th>
+            <th>Dismissible</th>
+            <th>Window (UTC)</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var notification in _items)
+        {
+            var current = notification;
+            <tr class="@(current.Id == _form?.Id ? "row-selected" : null)">
+                <td><FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => BeginEdit(current))">@current.Title</FluentButton></td>
+                <td><StatusBadge Text="@current.Type.ToString()" Tone="@TypeTone(current.Type)" /></td>
+                <td>@current.Priority</td>
+                <td>
+                    @if (current.IsActive)
+                    {
+                        <StatusBadge Text="Active" Tone="BadgeTone.Success" />
+                    }
+                    else
+                    {
+                        <StatusBadge Text="Inactive" Tone="BadgeTone.Neutral" />
+                    }
+                </td>
+                <td>@(current.IsDismissible ? "Yes" : "No")</td>
+                <td>@FormatWindow(current.StartDate, current.EndDate)</td>
+                <td class="col-actions">
+                    @if (_confirmDeleteId == current.Id)
+                    {
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteAsync(current.Id))">Confirm delete</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = null)">Cancel</FluentButton>
+                    }
+                    else
+                    {
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _ = ToggleActiveAsync(current))">
+                            @(current.IsActive ? "Deactivate" : "Activate")
+                        </FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = current.Id)">Delete…</FluentButton>
+                    }
+                </td>
+            </tr>
+        }
+        @if (!_loading && _items.Count == 0)
+        {
+            <tr><td colspan="7" class="text-center text-body-secondary py-4">No notifications yet.</td></tr>
+        }
+    </tbody>
+</table>
+
+@if (_form is not default(NotificationFormModel))
+{
+    <AdminCard Class="mt-4" Title="@(_form.Id is null ? "Create notification" : "Edit notification")">
+        <div class="admin-form-grid">
+                <FluentTextField Label="Title *" @bind-Value="_form.Title" />
+                <FluentSelect TOption="string" Label="Type" @bind-Value="_form.TypeText">
+                    @foreach (var type in Enum.GetValues<NotificationTypeDto>())
+                    {
+                        <FluentOption TOption="string" Value="@type.ToString()" Selected="@(_form.TypeText == type.ToString())">@type</FluentOption>
+                    }
+                </FluentSelect>
+                <FluentNumberField Label="Priority" @bind-Value="_form.Priority" />
+                <FluentTextField Label="Link URL" @bind-Value="_form.LinkUrl" />
+                <FluentTextField Label="Link text" @bind-Value="_form.LinkText" />
+                <FluentTextField Label="Start date (UTC, e.g. 2026-01-01T00:00Z, empty = now)" @bind-Value="_form.StartDateText" />
+                <FluentTextField Label="End date (UTC, empty = never)" @bind-Value="_form.EndDateText" />
+                <FluentSwitch Label="Active" @bind-Value="_form.IsActive" />
+                <FluentSwitch Label="Dismissible" @bind-Value="_form.IsDismissible" />
+                <FluentTextArea Label="Description" @bind-Value="_form.Description" Resize="TextAreaResize.Vertical" Rows="3" Class="span-all" />
+            </div>
+            <div class="d-flex gap-2">
+                <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = SaveAsync())">Save</FluentButton>
+                <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _form = null)">Cancel</FluentButton>
+            </div>
+    </AdminCard>
+}
+
+@code
+{
+    private List<NotificationDto> _items = [];
+    private List<string> _errors = [];
+    private bool _loading;
+    private Guid? _confirmDeleteId;
+    private NotificationFormModel? _form;
+
+    // Mutable form model (records with init-only props cannot be @bind targets).
+    private sealed class NotificationFormModel
+    {
+        public Guid? Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public string? LinkUrl { get; set; }
+        public string? LinkText { get; set; }
+        public string TypeText { get; set; } = nameof(NotificationTypeDto.Info);
+        public int Priority { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsDismissible { get; set; } = true;
+        public string? StartDateText { get; set; }
+        public string? EndDateText { get; set; }
+    }
+
+    protected override void OnInitialized() => _ = LoadAsync();
+
+    private static BadgeTone TypeTone(NotificationTypeDto type) => type switch
+    {
+        NotificationTypeDto.Warning => BadgeTone.Warning,
+        NotificationTypeDto.Maintenance => BadgeTone.Info,
+        NotificationTypeDto.Outage => BadgeTone.Danger,
+        _ => BadgeTone.Neutral,
+    };
+
+    private static string FormatWindow(DateTime? start, DateTime? end)
+        => $"{start?.ToString("yyyy-MM-dd") ?? "…"} → {end?.ToString("yyyy-MM-dd") ?? "∞"}";
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        _errors = [];
+        _confirmDeleteId = null;
+        StateHasChanged();
+
+        using var response = await NotificationsAdmin.ExecuteAsync((options, api) => api.GetAll(options));
+        var data = response.ToData<List<NotificationDto>>(out var errors);
+        if (data is not default(List<NotificationDto>))
+        {
+            _items = data.OrderByDescending(x => x.Priority).ThenBy(x => x.Title).ToList();
+        }
+        else
+        {
+            _items = [];
+            _errors = errors;
+        }
+
+        _loading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private Task BeginCreateAsync()
+    {
+        _form = new NotificationFormModel();
+        return InvokeAsync(StateHasChanged);
+    }
+
+    private void BeginEdit(NotificationDto notification)
+    {
+        _form = new NotificationFormModel
+        {
+            Id = notification.Id,
+            Title = notification.Title,
+            Description = notification.Description,
+            LinkUrl = notification.LinkUrl,
+            LinkText = notification.LinkText,
+            TypeText = notification.Type.ToString(),
+            Priority = notification.Priority,
+            IsActive = notification.IsActive,
+            IsDismissible = notification.IsDismissible,
+            StartDateText = notification.StartDate?.ToString("O"),
+            EndDateText = notification.EndDate?.ToString("O"),
+        };
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private static DateTime? ParseDate(string? value)
+        => DateTimeOffset.TryParse(value, out var parsed) ? parsed.UtcDateTime : null;
+
+    private async Task SaveAsync()
+    {
+        if (_form is default(NotificationFormModel) || string.IsNullOrWhiteSpace(_form.Title))
+        {
+            _errors = ["Title is required."];
+            await InvokeAsync(StateHasChanged);
+            return;
+        }
+
+        _errors = [];
+        var formType = Enum.TryParse<NotificationTypeDto>(_form.TypeText, out var parsedType) ? parsedType : NotificationTypeDto.Info;
+        if (_form.Id is null)
+        {
+            using var create = await NotificationsAdmin.ExecuteAsync((options, api) => api.Create(new CreateNotificationDto
+            {
+                Title = _form.Title.Trim(),
+                Description = _form.Description,
+                LinkUrl = _form.LinkUrl,
+                LinkText = _form.LinkText,
+                Type = formType,
+                Priority = _form.Priority,
+                IsActive = _form.IsActive,
+                IsDismissible = _form.IsDismissible,
+                StartDate = ParseDate(_form.StartDateText),
+                EndDate = ParseDate(_form.EndDateText),
+            }, options));
+            create.ToData<object>(out var errors);
+            if (errors.Count > 0)
+            {
+                _errors = errors;
+            }
+        }
+        else
+        {
+            using var update = await NotificationsAdmin.ExecuteAsync((options, api) => api.Update(new UpdateNotificationDto
+            {
+                Id = _form.Id.Value,
+                Title = _form.Title.Trim(),
+                Description = _form.Description,
+                LinkUrl = _form.LinkUrl,
+                LinkText = _form.LinkText,
+                Type = formType,
+                Priority = _form.Priority,
+                IsActive = _form.IsActive,
+                IsDismissible = _form.IsDismissible,
+                StartDate = ParseDate(_form.StartDateText),
+                EndDate = ParseDate(_form.EndDateText),
+            }, options));
+            update.ToData<object>(out var errors);
+            if (errors.Count > 0)
+            {
+                _errors = errors;
+            }
+        }
+
+        _form = null;
+        await LoadAsync();
+    }
+
+    private async Task ToggleActiveAsync(NotificationDto notification)
+    {
+        _errors = [];
+        using var response = await NotificationsAdmin.ExecuteAsync((options, api) => api.Update(new UpdateNotificationDto
+        {
+            Id = notification.Id,
+            Title = notification.Title,
+            Description = notification.Description,
+            LinkUrl = notification.LinkUrl,
+            LinkText = notification.LinkText,
+            Type = notification.Type,
+            Priority = notification.Priority,
+            IsActive = !notification.IsActive,
+            IsDismissible = notification.IsDismissible,
+            StartDate = notification.StartDate,
+            EndDate = notification.EndDate,
+        }, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await LoadAsync();
+    }
+
+    private async Task DeleteAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await NotificationsAdmin.ExecuteAsync((options, api) =>
+            api.Delete(new DeleteNotificationDto { Id = id }, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await LoadAsync();
+    }
+}

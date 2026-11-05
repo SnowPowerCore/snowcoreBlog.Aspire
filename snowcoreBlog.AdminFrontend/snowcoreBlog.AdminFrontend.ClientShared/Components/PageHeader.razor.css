@@ -1,0 +1,12 @@
+.page-header-title {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.page-header-subtitle {
+    margin: 6px 0 0;
+    font-size: 14px;
+    max-width: 760px;
+    color: var(--neutral-foreground-hint);
+}

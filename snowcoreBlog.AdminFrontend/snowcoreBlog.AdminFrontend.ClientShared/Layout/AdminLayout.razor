@@ -1,0 +1,19 @@
+@inherits LayoutComponentBase
+
+<FluentDesignTheme Mode="DesignThemeModes.Dark" StorageName="admin-theme" />
+<FluentToastProvider />
+
+<div class="admin-shell d-flex flex-column min-vh-100">
+    <AdminHeader />
+    <div class="admin-body d-flex flex-grow-1">
+        <aside class="admin-sidebar">
+            <AdminNavMenu />
+        </aside>
+        <main class="admin-main">
+            @Body
+            <footer class="admin-footer">
+                snowcore's Blog — Admin Portal · managed by invited administrators only
+            </footer>
+        </main>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="page-header">
+    <div class="page-header-text">
+        <h1 class="page-header-title">@Title</h1>
+        @if (!string.IsNullOrEmpty(Subtitle))
+        {
+            <p class="page-header-subtitle">@Subtitle</p>
+        }
+    </div>
+    @if (Actions is not default(RenderFragment))
+    {
+        <div class="page-header-actions">@Actions</div>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? Subtitle { get; set; }
+
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
+}

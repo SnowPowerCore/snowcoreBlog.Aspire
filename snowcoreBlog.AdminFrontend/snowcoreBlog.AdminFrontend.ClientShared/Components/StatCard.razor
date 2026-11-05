@@ -1,0 +1,27 @@
+@using snowcoreBlog.AdminFrontend.ClientShared.Models
+
+<a class="stat-card" href="@Href">
+    <span class="stat-card-icon @($"tone-{Tone.ToString().ToLowerInvariant()}")">@Icon</span>
+    <span class="stat-card-text">
+        <span class="stat-card-label">@Label</span>
+        <span class="stat-card-description">@Description</span>
+    </span>
+</a>
+
+@code
+{
+    [Parameter, EditorRequired]
+    public RenderFragment Icon { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = string.Empty;
+
+    [Parameter]
+    public string? Description { get; set; }
+
+    [Parameter]
+    public string Href { get; set; } = string.Empty;
+
+    [Parameter]
+    public StatTone Tone { get; set; } = StatTone.Neutral;
+}

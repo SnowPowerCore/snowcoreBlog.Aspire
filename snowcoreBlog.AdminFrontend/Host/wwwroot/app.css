@@ -1,0 +1,60 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background-color: var(--neutral-layer-1);
+    color: var(--neutral-foreground-rest);
+}
+
+#app {
+    min-height: 100vh;
+}
+
+/* Deliberately minimal: layout/widgets use Bootstrap utility classes inline and
+   per-component scoped CSS (.razor.css) — mirrors the public frontend approach. */
+
+#app { min-height: 100vh; }
+
+/* FluentUI dark-theme body base (bootstrap reboot keeps everything else) */
+body {
+    background-color: var(--neutral-layer-1);
+    color: var(--neutral-foreground-rest);
+}
+
+/* Compact responsive form grid for FluentUI fields (used by editor forms) */
+.admin-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px 18px;
+    align-items: start;
+}
+
+.admin-form-grid .span-all { grid-column: 1 / -1; }
+
+.admin-form-grid fluent-text-field,
+.admin-form-grid fluent-text-area,
+.admin-form-grid fluent-select,
+.admin-form-grid fluent-number-field {
+    display: block;
+    width: 100%;
+}
+
+.admin-monospace {
+    font-family: Consolas, monospace;
+    font-size: 12px;
+}
+
+/* Markdown preview block (article snapshot) */
+.admin-markdown {
+    background: var(--neutral-fill-secondary-rest, rgba(255,255,255,.05));
+    border: 1px solid var(--neutral-stroke-rest);
+    border-radius: 8px;
+    padding: 14px;
+    max-height: 420px;
+    overflow: auto;
+    white-space: pre-wrap;
+}
+
+/* Centered auth panels (login / invite acceptance) */
+.auth-panel { max-width: 480px; }
+.auth-panel-wide { max-width: 560px; }

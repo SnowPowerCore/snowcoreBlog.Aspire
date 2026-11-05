@@ -11,6 +11,7 @@
     <Project Path="snowcoreBlog.Backend/BusinessServices/Articles/snowcoreBlog.Backend.Articles.csproj" />
     <Project Path="snowcoreBlog.Backend/BusinessServices/AuthorsManagement/snowcoreBlog.Backend.AuthorsManagement.csproj" />
     <Project Path="snowcoreBlog.Backend/BusinessServices/ReadersManagement/snowcoreBlog.Backend.ReadersManagement.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/AdminsManagement/snowcoreBlog.Backend.AdminsManagement.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Core/snowcoreBlog.Backend.Core.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Gateway.Middleware/snowcoreBlog.Backend.Gateway.Middleware.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Infrastructure/snowcoreBlog.Backend.Infrastructure.csproj" />
@@ -36,6 +37,11 @@
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Core/snowcoreBlog.Frontend.Core.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.Infrastructure/snowcoreBlog.Frontend.Infrastructure.csproj" />
     <Project Path="snowcoreBlog.Frontend/snowcoreBlog.Frontend.WasmForDebugging/snowcoreBlog.Frontend.WasmForDebugging.csproj" />
+  </Folder>
+  <Folder Name="/AdminFrontend/">
+    <Project Path="snowcoreBlog.AdminFrontend/Host/snowcoreBlog.AdminFrontend.Host.csproj" />
+    <Project Path="snowcoreBlog.AdminFrontend/snowcoreBlog.AdminFrontend.Client/snowcoreBlog.AdminFrontend.Client.csproj" />
+    <Project Path="snowcoreBlog.AdminFrontend/snowcoreBlog.AdminFrontend.ClientShared/snowcoreBlog.AdminFrontend.ClientShared.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />

@@ -1,0 +1,408 @@
+@using snowcoreBlog.AdminFrontend.ClientShared.Models
+
+@page "/access-restrictions"
+
+@inject IApizrManager<IApiAccessRestrictionsAdminApi> AccessAdmin
+
+<PageTitle>API Access Restrictions — Admin</PageTitle>
+
+<PageHeader Title="API Access Restrictions"
+            Subtitle="Gateway access rules and response templates (backend-apiaccessrestrictions). Changes are picked up by the gateway via ApiAccessRestrictionsChanged events." />
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+<FluentTabs>
+    <FluentTab Label="Rules">
+        <div class="d-flex flex-wrap gap-2 align-items-center mt-3 mb-3">
+            <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ruleForm = new RuleFormModel())">＋ New rule</FluentButton>
+            @if (_rulesLoading)
+            {
+                <FluentProgressRing Style="width: 24px; height: 24px;" />
+            }
+        </div>
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Enabled</th>
+                    <th>Action</th>
+                    <th>Priority</th>
+                    <th>Paths</th>
+                    <th>IP ranges</th>
+                    <th>Expires (UTC)</th>
+                    <th class="col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rule in _rules)
+                {
+                    var current = rule;
+                    <tr class="@(current.Id == _ruleForm?.Id ? "row-selected" : null)">
+                        <td><FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => BeginEditRule(current))">@(current.Name ?? current.Id.ToString())</FluentButton></td>
+                        <td>
+                            @if (current.Enabled)
+                            {
+                                <StatusBadge Text="On" Tone="BadgeTone.Success" />
+                            }
+                            else
+                            {
+                                <StatusBadge Text="Off" Tone="BadgeTone.Neutral" />
+                            }
+                        </td>
+                        <td><StatusBadge Text="@current.Action.ToString()" Tone="@(current.Action == ApiAccessRestrictionActionDto.Block ? BadgeTone.Danger : BadgeTone.Warning)" /></td>
+                        <td>@current.Priority</td>
+                        <td class="admin-monospace">@string.Join(", ", current.PathPatterns)</td>
+                        <td class="admin-monospace">@string.Join(", ", current.IpRanges)</td>
+                        <td>@(current.ExpiresAt?.ToString("yyyy-MM-dd") ?? "never")</td>
+                        <td class="col-actions">
+                            @if (_confirmDeleteRuleId == current.Id)
+                            {
+                                <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteRuleAsync(current.Id))">Confirm delete</FluentButton>
+                                <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteRuleId = null)">Cancel</FluentButton>
+                            }
+                            else
+                            {
+                                <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteRuleId = current.Id)">Delete…</FluentButton>
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (!_rulesLoading && _rules.Count == 0)
+                {
+                    <tr><td colspan="8" class="text-center text-body-secondary py-4">No rules configured.</td></tr>
+                }
+            </tbody>
+        </table>
+
+        @if (_ruleForm is not default(RuleFormModel))
+        {
+            <AdminCard Class="mt-4" Title="@(_ruleForm.Id is null ? "Create rule" : "Edit rule")">
+                <div class="admin-form-grid">
+                        <FluentTextField Label="Name" @bind-Value="_ruleForm.Name" />
+                        <FluentTextField Label="Description" @bind-Value="_ruleForm.Description" />
+                        <FluentSelect TOption="string" Label="Action" @bind-Value="_ruleForm.ActionText">
+                            @foreach (var action in Enum.GetValues<ApiAccessRestrictionActionDto>())
+                            {
+                                <FluentOption TOption="string" Value="@action.ToString()" Selected="@(_ruleForm.ActionText == action.ToString())">@action</FluentOption>
+                            }
+                        </FluentSelect>
+                        <FluentNumberField Label="Priority" @bind-Value="_ruleForm.Priority" />
+                        <FluentTextField Label="Expires at (UTC, e.g. 2026-12-31T23:59Z, empty = never)" @bind-Value="_ruleForm.ExpiresAtText" />
+                        <FluentSwitch Label="Enabled" @bind-Value="_ruleForm.Enabled" />
+                        <FluentTextArea Label="Path patterns (one per line: /api/articles, /api/articles/*, regex:^/x$)" @bind-Value="_ruleForm.PathPatternsText" Resize="TextAreaResize.Vertical" Rows="3" Class="span-all" />
+                        <FluentTextArea Label="HTTP methods (one per line, empty = any)" @bind-Value="_ruleForm.MethodsText" Resize="TextAreaResize.Vertical" Rows="2" Class="span-all" />
+                        <FluentTextArea Label="IP ranges (CIDR / single / range, one per line)" @bind-Value="_ruleForm.IpRangesText" Resize="TextAreaResize.Vertical" Rows="2" Class="span-all" />
+                        <FluentTextArea Label="Region codes (one per line)" @bind-Value="_ruleForm.RegionCodesText" Resize="TextAreaResize.Vertical" Rows="2" Class="span-all" />
+                        <FluentTextArea Label="Tags (one per line)" @bind-Value="_ruleForm.TagsText" Resize="TextAreaResize.Vertical" Rows="2" Class="span-all" />
+                    </div>
+                    <div class="d-flex gap-2">
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = SaveRuleAsync())">Save</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _ruleForm = null)">Cancel</FluentButton>
+                    </div>
+            </AdminCard>
+        }
+    </FluentTab>
+
+    <FluentTab Label="Response templates">
+        <div class="d-flex flex-wrap gap-2 align-items-center mt-3 mb-3">
+            <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _templateForm = new TemplateFormModel())">＋ New template</FluentButton>
+            @if (_templatesLoading)
+            {
+                <FluentProgressRing Style="width: 24px; height: 24px;" />
+            }
+        </div>
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status code</th>
+                    <th>Content type</th>
+                    <th>Reason</th>
+                    <th>Body (JSON)</th>
+                    <th class="col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var template in _templates)
+                {
+                    var current = template;
+                    <tr class="@(current.Id == _templateForm?.Id ? "row-selected" : null)">
+                        <td><FluentButton Appearance="Appearance.Lightweight" OnClick="@(() => BeginEditTemplate(current))">@(current.Name ?? current.Id.ToString())</FluentButton></td>
+                        <td>@current.StatusCode</td>
+                        <td class="admin-monospace">@current.ContentType</td>
+                        <td>@(current.Reason ?? "—")</td>
+                        <td class="admin-monospace" title="@(current.BodyJson ?? string.Empty)">@((current.BodyJson ?? "—")[..Math.Min(60, (current.BodyJson ?? "—").Length)])</td>
+                        <td class="col-actions">
+                            @if (_confirmDeleteTemplateId == current.Id)
+                            {
+                                <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteTemplateAsync(current.Id))">Confirm delete</FluentButton>
+                                <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteTemplateId = null)">Cancel</FluentButton>
+                            }
+                            else
+                            {
+                                <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteTemplateId = current.Id)">Delete…</FluentButton>
+                            }
+                        </td>
+                    </tr>
+                }
+                @if (!_templatesLoading && _templates.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center text-body-secondary py-4">No templates configured.</td></tr>
+                }
+            </tbody>
+        </table>
+
+        @if (_templateForm is not default(TemplateFormModel))
+        {
+            <AdminCard Class="mt-4" Title="@(_templateForm.Id is null ? "Create template" : "Edit template")">
+                <div class="admin-form-grid">
+                    <FluentTextField Label="Name" @bind-Value="_templateForm.Name" />
+                    <FluentNumberField Label="Status code" @bind-Value="_templateForm.StatusCode" />
+                    <FluentTextField Label="Content type" @bind-Value="_templateForm.ContentType" />
+                    <FluentTextField Label="Reason" @bind-Value="_templateForm.Reason" />
+                    <FluentTextArea Label="Body JSON" @bind-Value="_templateForm.BodyJson" Resize="TextAreaResize.Vertical" Rows="4" Class="span-all" />
+                </div>
+                <div class="d-flex gap-2">
+                    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = SaveTemplateAsync())">Save</FluentButton>
+                    <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _templateForm = null)">Cancel</FluentButton>
+                </div>
+            </AdminCard>
+        }
+    </FluentTab>
+</FluentTabs>
+
+@code
+{
+    private List<string> _errors = [];
+    private List<ApiAccessRuleView> _rules = [];
+    private List<ApiAccessResponseTemplateView> _templates = [];
+    private bool _rulesLoading;
+    private bool _templatesLoading;
+    private Guid? _confirmDeleteRuleId;
+    private Guid? _confirmDeleteTemplateId;
+    private RuleFormModel? _ruleForm;
+    private TemplateFormModel? _templateForm;
+
+    private sealed class RuleFormModel
+    {
+        public Guid? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public bool Enabled { get; set; } = true;
+        public int Priority { get; set; }
+        public string ActionText { get; set; } = nameof(ApiAccessRestrictionActionDto.Block);
+        public string MethodsText { get; set; } = string.Empty;
+        public string PathPatternsText { get; set; } = string.Empty;
+        public string TagsText { get; set; } = string.Empty;
+        public string IpRangesText { get; set; } = string.Empty;
+        public string RegionCodesText { get; set; } = string.Empty;
+        public string? ExpiresAtText { get; set; }
+    }
+
+    private sealed class TemplateFormModel
+    {
+        public Guid? Id { get; set; }
+        public string? Name { get; set; }
+        public int StatusCode { get; set; } = 403;
+        public string ContentType { get; set; } = "application/json";
+        public string? BodyJson { get; set; }
+        public string? Reason { get; set; }
+    }
+
+    protected override void OnInitialized()
+    {
+        _ = LoadRulesAsync();
+        _ = LoadTemplatesAsync();
+    }
+
+    private static List<string> ParseLines(string? text)
+        => (text ?? string.Empty)
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .ToList();
+
+    private static DateTimeOffset? ParseDate(string? value)
+        => DateTimeOffset.TryParse(value, out var parsed) ? parsed : null;
+
+    private async Task LoadRulesAsync()
+    {
+        _rulesLoading = true;
+        StateHasChanged();
+        using var response = await AccessAdmin.ExecuteAsync((options, api) => api.GetRules(options));
+        _rules = response.IsSuccess ? response.Result?.OrderByDescending(x => x.Priority).ToList() ?? [] : [];
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+        _rulesLoading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadTemplatesAsync()
+    {
+        _templatesLoading = true;
+        StateHasChanged();
+        using var response = await AccessAdmin.ExecuteAsync((options, api) => api.GetTemplates(options));
+        _templates = response.IsSuccess ? response.Result ?? [] : [];
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+        _templatesLoading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void BeginEditRule(ApiAccessRuleView rule)
+    {
+        _ruleForm = new RuleFormModel
+        {
+            Id = rule.Id,
+            Name = rule.Name,
+            Description = rule.Description,
+            Enabled = rule.Enabled,
+            Priority = rule.Priority,
+            ActionText = rule.Action.ToString(),
+            MethodsText = string.Join("\n", rule.Methods),
+            PathPatternsText = string.Join("\n", rule.PathPatterns),
+            TagsText = string.Join("\n", rule.Tags),
+            IpRangesText = string.Join("\n", rule.IpRanges),
+            RegionCodesText = string.Join("\n", rule.RegionCodes),
+            ExpiresAtText = rule.ExpiresAt?.ToString("O"),
+        };
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SaveRuleAsync()
+    {
+        if (_ruleForm is default(RuleFormModel))
+        {
+            return;
+        }
+        _errors = [];
+        var action = Enum.TryParse<ApiAccessRestrictionActionDto>(_ruleForm.ActionText, out var parsedAction)
+            ? parsedAction
+            : ApiAccessRestrictionActionDto.Block;
+
+        var create = new CreateApiAccessRuleDto
+        {
+            Name = _ruleForm.Name,
+            Description = _ruleForm.Description,
+            Enabled = _ruleForm.Enabled,
+            Priority = _ruleForm.Priority,
+            Action = action,
+            Methods = ParseLines(_ruleForm.MethodsText),
+            PathPatterns = ParseLines(_ruleForm.PathPatternsText),
+            Tags = ParseLines(_ruleForm.TagsText),
+            IpRanges = ParseLines(_ruleForm.IpRangesText),
+            RegionCodes = ParseLines(_ruleForm.RegionCodesText),
+            ExpiresAt = ParseDate(_ruleForm.ExpiresAtText),
+        };
+
+        using var response = _ruleForm.Id is null
+            ? await AccessAdmin.ExecuteAsync((options, api) => api.CreateRule(create, options))
+            : await AccessAdmin.ExecuteAsync((options, api) => api.UpdateRule(_ruleForm.Id.Value, new UpdateApiAccessRuleDto
+            {
+                Id = _ruleForm.Id.Value,
+                Name = create.Name,
+                Description = create.Description,
+                Enabled = create.Enabled,
+                Priority = create.Priority,
+                Action = create.Action,
+                Methods = create.Methods,
+                PathPatterns = create.PathPatterns,
+                Tags = create.Tags,
+                IpRanges = create.IpRanges,
+                RegionCodes = create.RegionCodes,
+                ExpiresAt = create.ExpiresAt,
+            }, options));
+
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+
+        _ruleForm = null;
+        await LoadRulesAsync();
+    }
+
+    private async Task DeleteRuleAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await AccessAdmin.ExecuteAsync((options, api) => api.DeleteRule(id, options));
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+        await LoadRulesAsync();
+    }
+
+    private void BeginEditTemplate(ApiAccessResponseTemplateView template)
+    {
+        _templateForm = new TemplateFormModel
+        {
+            Id = template.Id,
+            Name = template.Name,
+            StatusCode = template.StatusCode,
+            ContentType = template.ContentType,
+            BodyJson = template.BodyJson,
+            Reason = template.Reason,
+        };
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private async Task SaveTemplateAsync()
+    {
+        if (_templateForm is default(TemplateFormModel))
+        {
+            return;
+        }
+        _errors = [];
+
+        var create = new CreateApiAccessResponseTemplateDto
+        {
+            Name = _templateForm.Name,
+            StatusCode = _templateForm.StatusCode,
+            ContentType = _templateForm.ContentType,
+            BodyJson = _templateForm.BodyJson,
+            Reason = _templateForm.Reason,
+        };
+
+        using var response = _templateForm.Id is null
+            ? await AccessAdmin.ExecuteAsync((options, api) => api.CreateTemplate(create, options))
+            : await AccessAdmin.ExecuteAsync((options, api) => api.UpdateTemplate(_templateForm.Id.Value, new UpdateApiAccessResponseTemplateDto
+            {
+                Id = _templateForm.Id.Value,
+                Name = create.Name,
+                StatusCode = create.StatusCode,
+                ContentType = create.ContentType,
+                BodyJson = create.BodyJson,
+                Reason = create.Reason,
+            }, options));
+
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+
+        _templateForm = null;
+        await LoadTemplatesAsync();
+    }
+
+    private async Task DeleteTemplateAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await AccessAdmin.ExecuteAsync((options, api) => api.DeleteTemplate(id, options));
+        if (!response.IsSuccess)
+        {
+            _errors = [response.Exception?.Message ?? "The request failed."];
+        }
+        await LoadTemplatesAsync();
+    }
+}

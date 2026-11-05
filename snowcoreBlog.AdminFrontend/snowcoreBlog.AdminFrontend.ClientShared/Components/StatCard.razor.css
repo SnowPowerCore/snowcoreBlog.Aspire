@@ -1,0 +1,52 @@
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid var(--neutral-stroke-divider-rest, rgba(255,255,255,.1));
+    background: var(--neutral-layer-2);
+    color: var(--neutral-foreground-rest);
+    text-decoration: none;
+    height: 100%;
+    box-sizing: border-box;
+    transition: border-color .15s ease, transform .15s ease;
+}
+
+.stat-card:hover {
+    border-color: var(--accent-base-rest, #0f6cbd);
+    transform: translateY(-2px);
+    text-decoration: none;
+    color: var(--neutral-foreground-rest);
+}
+
+.stat-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    font-size: 20px;
+}
+
+.stat-card-icon.tone-accent  { background: rgba(79, 107, 189, .22); }
+.stat-card-icon.tone-success { background: rgba(111, 181, 95, .18); }
+.stat-card-icon.tone-warning { background: rgba(200, 141, 26, .2); }
+.stat-card-icon.tone-danger  { background: rgba(196, 43, 28, .2); }
+.stat-card-icon.tone-neutral { background: var(--neutral-fill-secondary-rest); }
+
+.stat-card-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.stat-card-label { font-weight: 600; font-size: 14px; }
+
+.stat-card-description {
+    color: var(--neutral-foreground-hint);
+    font-size: 12px;
+    margin-top: 2px;
+}

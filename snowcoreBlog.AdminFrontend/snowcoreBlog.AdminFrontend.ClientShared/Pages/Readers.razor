@@ -1,0 +1,122 @@
+@page "/readers"
+
+@inject IApizrManager<IAdminReadersApi> ReadersAdmin
+
+<PageTitle>Readers — Admin</PageTitle>
+
+<PageHeader Title="Readers"
+            Subtitle="Reader account records (backend-readersmanagement). Deleting removes the reader business record (soft delete); the linked IAM user is not touched." />
+
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <FluentTextField @bind-Value="_search" Placeholder="Search nickname…" Style="min-width: 280px;" />
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = LoadAsync(1))">Search</FluentButton>
+    <FluentSpacer />
+    @if (_loading)
+    {
+        <FluentProgressRing Style="width: 24px; height: 24px;" />
+    }
+</div>
+
+@if (_errors.Count > 0)
+{
+    <FluentMessageBar Intent="MessageIntent.Error">
+        @foreach (var error in _errors)
+        {
+            <div>@error</div>
+        }
+    </FluentMessageBar>
+}
+
+<table class="table table-hover align-middle mb-0">
+    <thead>
+        <tr>
+            <th>Nickname</th>
+            <th>User Id</th>
+            <th>Entity Id</th>
+            <th class="col-actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reader in _items)
+        {
+            var current = reader;
+            <tr>
+                <td>@current.NickName</td>
+                <td class="admin-monospace">@current.UserId</td>
+                <td class="admin-monospace">@current.Id</td>
+                <td class="col-actions">
+                    @if (_confirmDeleteId == current.Id)
+                    {
+                        <FluentButton Appearance="Appearance.Accent" OnClick="@(() => _ = DeleteAsync(current.Id))">Confirm delete</FluentButton>
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = null)">Cancel</FluentButton>
+                    }
+                    else
+                    {
+                        <FluentButton Appearance="Appearance.Neutral" OnClick="@(() => _confirmDeleteId = current.Id)">Delete…</FluentButton>
+                    }
+                </td>
+            </tr>
+        }
+        @if (!_loading && _items.Count == 0)
+        {
+            <tr><td colspan="4" class="text-center text-body-secondary py-4">No reader accounts found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center align-items-center gap-2 mt-3">
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_page <= 1 || _loading)" OnClick="@(() => _ = LoadAsync(_page - 1))">← Previous</FluentButton>
+    <FluentLabel>Page @_page</FluentLabel>
+    <FluentButton Appearance="Appearance.Neutral" Disabled="@(_items.Count < _pageSize || _loading)" OnClick="@(() => _ = LoadAsync(_page + 1))">Next →</FluentButton>
+</div>
+
+@code
+{
+    private readonly int _pageSize = 25;
+
+    private List<ReaderAccountAdminDto> _items = [];
+    private List<string> _errors = [];
+    private string _search = string.Empty;
+    private bool _loading;
+    private int _page = 1;
+    private Guid? _confirmDeleteId;
+
+    protected override void OnInitialized() => _ = LoadAsync(1);
+
+    private async Task LoadAsync(int page)
+    {
+        _loading = true;
+        _errors = [];
+        _confirmDeleteId = null;
+        StateHasChanged();
+
+        using var response = await ReadersAdmin.ExecuteAsync((options, api) =>
+            api.SearchAccounts(page, _pageSize, _search, options));
+        var data = response.ToData<List<ReaderAccountAdminDto>>(out var errors);
+        if (data is not default(List<ReaderAccountAdminDto>))
+        {
+            _items = data;
+            _page = page;
+        }
+        else
+        {
+            _items = [];
+            _errors = errors;
+        }
+
+        _loading = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task DeleteAsync(Guid id)
+    {
+        _errors = [];
+        using var response = await ReadersAdmin.ExecuteAsync((options, api) => api.DeleteAccount(id, options));
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
+        {
+            _errors = errors;
+        }
+        await LoadAsync(_page);
+    }
+}

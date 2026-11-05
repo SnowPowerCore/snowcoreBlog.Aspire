@@ -57,6 +57,9 @@
     <PackageVersion Include="Fido2.Models" Version="4.2.0" />
     <!-- FluentValidation -->
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <!-- TickerQ Packages (pinned to 10.4.0 = last MIT/Apache dual-licensed release; newer versions are commercial).-->
+    <PackageVersion Include="TickerQ" Version="10.4.0" />
+    <PackageVersion Include="TickerQ.Dashboard" Version="10.4.0" />
     <!-- Database Packages -->
     <PackageVersion Include="Marten" Version="9.47.0" />
     <PackageVersion Include="Marten.SourceGenerator" Version="9.47.0" />
@@ -93,6 +96,8 @@
     <PackageVersion Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.13.1" />
     <!-- Microsoft TypeScript -->
     <PackageVersion Include="Microsoft.TypeScript.MSBuild" Version="6.0.3" />
+    <!-- AspectInjector: broker attributes for the in-repo checkpoint aspect (durable request persistence) -->
+    <PackageVersion Include="AspectInjector" Version="2.8.2" />
     <!-- MinimalStepified Packages -->
     <PackageVersion Include="MinimalStepifiedSystem.Core" Version="1.2.2.0" />
     <PackageVersion Include="MinimalStepifiedSystem.SourceGen" Version="1.2.2.0" />
