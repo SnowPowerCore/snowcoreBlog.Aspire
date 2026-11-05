@@ -144,7 +144,7 @@
         _ => BadgeTone.Neutral,
     };
 
-    private static string FormatWindow(DateTime? start, DateTime? end)
+    private static string FormatWindow(DateTimeOffset? start, DateTimeOffset? end)
         => $"{start?.ToString("yyyy-MM-dd") ?? "…"} → {end?.ToString("yyyy-MM-dd") ?? "∞"}";
 
     private async Task LoadAsync()
