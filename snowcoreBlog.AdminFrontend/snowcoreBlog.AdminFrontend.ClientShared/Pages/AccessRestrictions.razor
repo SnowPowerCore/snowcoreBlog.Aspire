@@ -182,8 +182,8 @@
 @code
 {
     private List<string> _errors = [];
-    private List<ApiAccessRuleView> _rules = [];
-    private List<ApiAccessResponseTemplateView> _templates = [];
+    private List<ApiAccessRuleDto> _rules = [];
+    private List<ApiAccessResponseTemplateDto> _templates = [];
     private bool _rulesLoading;
     private bool _templatesLoading;
     private Guid? _confirmDeleteRuleId;
@@ -236,10 +236,11 @@
         _rulesLoading = true;
         StateHasChanged();
         using var response = await AccessAdmin.ExecuteAsync((options, api) => api.GetRules(options));
-        _rules = response.IsSuccess ? response.Result?.OrderByDescending(x => x.Priority).ToList() ?? [] : [];
-        if (!response.IsSuccess)
+        var data = response.ToData<List<ApiAccessRuleDto>>(out var errors);
+        _rules = data?.OrderByDescending(x => x.Priority).ToList() ?? [];
+        if (errors.Count > 0)
         {
-            _errors = [response.Exception?.Message ?? "The request failed."];
+            _errors = errors;
         }
         _rulesLoading = false;
         await InvokeAsync(StateHasChanged);
@@ -250,16 +251,17 @@
         _templatesLoading = true;
         StateHasChanged();
         using var response = await AccessAdmin.ExecuteAsync((options, api) => api.GetTemplates(options));
-        _templates = response.IsSuccess ? response.Result ?? [] : [];
-        if (!response.IsSuccess)
+        var data = response.ToData<List<ApiAccessResponseTemplateDto>>(out var errors);
+        _templates = data ?? [];
+        if (errors.Count > 0)
         {
-            _errors = [response.Exception?.Message ?? "The request failed."];
+            _errors = errors;
         }
         _templatesLoading = false;
         await InvokeAsync(StateHasChanged);
     }
 
-    private void BeginEditRule(ApiAccessRuleView rule)
+    private void BeginEditRule(ApiAccessRuleDto rule)
     {
         _ruleForm = new RuleFormModel
         {
@@ -328,6 +330,12 @@
             _errors = [response.Exception?.Message ?? "The request failed."];
         }
 
+        response.ToData<object>(out var saveErrors);
+        if (saveErrors.Count > 0)
+        {
+            _errors = saveErrors;
+        }
+
         _ruleForm = null;
         await LoadRulesAsync();
     }
@@ -336,14 +344,15 @@
     {
         _errors = [];
         using var response = await AccessAdmin.ExecuteAsync((options, api) => api.DeleteRule(id, options));
-        if (!response.IsSuccess)
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
         {
-            _errors = [response.Exception?.Message ?? "The request failed."];
+            _errors = errors;
         }
         await LoadRulesAsync();
     }
 
-    private void BeginEditTemplate(ApiAccessResponseTemplateView template)
+    private void BeginEditTemplate(ApiAccessResponseTemplateDto template)
     {
         _templateForm = new TemplateFormModel
         {
@@ -391,6 +400,12 @@
             _errors = [response.Exception?.Message ?? "The request failed."];
         }
 
+        response.ToData<object>(out var saveTemplateErrors);
+        if (saveTemplateErrors.Count > 0)
+        {
+            _errors = saveTemplateErrors;
+        }
+
         _templateForm = null;
         await LoadTemplatesAsync();
     }
@@ -399,9 +414,10 @@
     {
         _errors = [];
         using var response = await AccessAdmin.ExecuteAsync((options, api) => api.DeleteTemplate(id, options));
-        if (!response.IsSuccess)
+        response.ToData<object>(out var errors);
+        if (errors.Count > 0)
         {
-            _errors = [response.Exception?.Message ?? "The request failed."];
+            _errors = errors;
         }
         await LoadTemplatesAsync();
     }

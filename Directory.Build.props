@@ -1,0 +1,11 @@
+<Project>
+
+  <!-- Test projects run on Microsoft.Testing.Platform (xunit.v3 has built-in MTP support).
+       `dotnet test` uses the native MTP runner via global.json ("test.runner").
+       Do NOT use VSTest-only arguments (filter, logger) with dotnet test anymore. -->
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <OutputType>Exe</OutputType>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
+
+</Project>
