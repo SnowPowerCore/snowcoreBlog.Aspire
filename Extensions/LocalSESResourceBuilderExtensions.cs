@@ -34,14 +34,3 @@ public static class LocalSESResourceBuilderExtensions
                           name: LocalSESResource.HttpEndpointName);
     }
 }
-
-// This class just contains constant strings that can be updated periodically
-// when new versions of the underlying container are released.
-internal static class LocalSESContainerImageTags
-{
-    internal const string Registry = "docker.io";
-
-    internal const string Image = "dansyuqri/local-ses";
-
-    internal const string Tag = "latest";
-}

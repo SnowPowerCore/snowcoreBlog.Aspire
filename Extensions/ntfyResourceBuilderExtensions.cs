@@ -37,14 +37,3 @@ public static class ntfyResourceBuilderExtensions
                           name: ntfyResource.HttpEndpointName);
     }
 }
-
-// This class just contains constant strings that can be updated periodically
-// when new versions of the underlying container are released.
-internal static class ntfyContainerImageTags
-{
-    internal const string Registry = "docker.io";
-
-    internal const string Image = "binwiederhier/ntfy";
-
-    internal const string Tag = "latest";
-}

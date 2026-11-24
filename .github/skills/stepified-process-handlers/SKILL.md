@@ -1,81 +1,156 @@
-StepifiedProcess Handlers (delegate + context + steps)
+---
+name: stepified-process-handlers
+description: >-
+  How-to for the MinimalStepifiedSystem pattern — delegate, context, steps,
+  endpoint attribute, DI registration, shared steps for duplicated logic, and
+  checkpointed steps for durable flows. Includes the stepified-vs-direct
+  decision guide. Use when implementing a multi-step backend flow or refactoring
+  endpoint logic into steps.
+scope: project
+---
 
-Purpose
-- Use the Stepified process pattern for large, dynamic, multi-step endpoint logic. This breaks big flows into sequential, testable, injectable steps.
+# Stepified Process Handlers
 
-When to use
-- Use when the business flow has many conditional branches, multiple persistence or integration steps, or when the logic evolves frequently. For trivial CRUD operations prefer a simple endpoint.
-- Always ask the human (or user) whether the flow should be stepified before choosing it.
+Use this skill to implement a multi-step endpoint flow with
+MinimalStepifiedSystem 1.2.2 (`MinimalStepifiedSystem.Core` + `.SourceGen`).
 
-Core pieces
-- Delegate: a `delegate Task<IMaybe<TOperationResult>>(TContext ctx, CancellationToken ct = default)` placed under `Delegates/`.
-- Context: a context record/class under `Context/` that holds request data and intermediate values. Inherit from `BaseGenericContext`.
-- Steps: classes under `Steps/**` that implement `IStep<TDelegate, TContext, IMaybe<TOperationResult>>`.
-- Endpoint: a property decorated with `[StepifiedProcess(Steps = [ typeof(StepA), typeof(StepB) ])]` pointing to the delegate.
+## When to Invoke
 
-Example delegate (Delegates/CreateArticleDelegate.cs)
+- A flow has several conditional branches, persistence or integration calls
+- "add a step", "compose validation + persistence + event publishing"
+- Extracting duplicated logic from multiple steps
+
+## When NOT to Invoke
+
+- Short endpoints unlikely to grow — inject the repository/service directly
+  into the endpoint instead. AdminsManagement does this for `SearchAdminAccountsEndpoint`,
+  `GetAdminMeEndpoint`, `AdminLogoutEndpoint`, `GetAdminInvitesEndpoint`,
+  `ResolveAdminInviteEndpoint`, `RevokeAdminInviteEndpoint` — while its
+  `CreateAdminInviteEndpoint`/`AcceptAdminInviteEndpoint` ARE stepified
+- **When unsure whether to stepify, ask the developer** (interactive question
+  flow) — this is an explicit judgment call in this repo
+
+## Background
+
+The endpoint declares a delegate property; the `[StepifiedProcess]` source
+generator turns it into an invocable pipeline. Steps are `AddScoped` DI
+services implementing `IStep<TDelegate, TContext, IMaybe<T>>` that either
+continue via `next(context, token)` or short-circuit with `IMaybe<T>`.
+`T` is always a domain DTO (from `snowcoreBlog.Universal/PublicApi`) — never
+`ApiResponse`/`HttpStatusCode` (that op-result pattern was removed 2026-11-11).
+
+## Step 1 — Delegate (`Delegates/`)
+
 ```csharp
 using MaybeResults;
-using snowcoreBlog.Backend.Articles.Context;
+using snowcoreBlog.Backend.ReadersManagement.Context;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
-public delegate Task<IMaybe<CreateArticleOperationResult>> CreateArticleDelegate(CreateArticleContext context, CancellationToken token = default);
+namespace snowcoreBlog.Backend.ReadersManagement.Delegates;
+
+public delegate Task<IMaybe<RequestReaderAccountCreationResultDto>> RequestCreateReaderAccountDelegate(
+    RequestCreateReaderAccountContext context, CancellationToken token = default);
 ```
 
-Example context (Context/CreateArticleContext.cs)
+## Step 2 — Context (`Context/`, inherits `BaseGenericContext`)
+
 ```csharp
 using MinimalStepifiedSystem.Base;
+using snowcoreBlog.PublicApi.BusinessObjects.Dto;
 
-public sealed class CreateArticleContext(CreateArticleRequest request) : BaseGenericContext
+namespace snowcoreBlog.Backend.ReadersManagement.Context;
+
+public class RequestCreateReaderAccountContext(RequestCreateReaderAccountDto request) : BaseGenericContext
 {
-    public CreateArticleRequest Request { get; } = request;
-    public ArticleEntity? Article { get; set; }
-    public CreateArticleOperationResult? Result { get; set; }
+    public RequestCreateReaderAccountDto CreateRequest { get; } = request;
+    // add mutable properties here as steps produce intermediate data
 }
 ```
 
-Example step (Steps/ValidateArticleTitleStep.cs)
+## Step 3 — Steps (`Steps/<Feature>[/<Op>]/`)
+
+Middle step: validate then continue, or short-circuit with a typed `[None]` error:
+
 ```csharp
-using MaybeResults;
-using MinimalStepifiedSystem.Interfaces;
-
-public sealed class ValidateArticleTitleStep() : IStep<CreateArticleDelegate, CreateArticleContext, IMaybe<CreateArticleOperationResult>>
+public class ValidateReaderAccountEmailDomainStep(IRequestClient<CheckEmailDomain> requestClient)
+    : IStep<RequestCreateReaderAccountDelegate, RequestCreateReaderAccountContext, IMaybe<RequestReaderAccountCreationResultDto>>
 {
-    public Task<IMaybe<CreateArticleOperationResult>> InvokeAsync(CreateArticleContext context, CreateArticleDelegate next, CancellationToken token = default)
+    public async Task<IMaybe<RequestReaderAccountCreationResultDto>> InvokeAsync(
+        RequestCreateReaderAccountContext context,
+        RequestCreateReaderAccountDelegate next,
+        CancellationToken token = default)
     {
-        if (string.IsNullOrWhiteSpace(context.Request.Title))
-            return Task.FromResult(Maybe.Create(new CreateArticleOperationResult { HttpStatusCode = 400, Response = ErrorResponseUtilities.ApiResponseWithErrors(["Title is required"], 400) }));
+        context.ReportStepProgress(ReaderAccountStepProgressCodes.ValidatingEmailDomain); // optional SSE
 
-        return next(context, token);
+        var result = await requestClient.GetResponse<DataResult<EmailDomainChecked>>(
+            context.CreateRequest.ToCheckEmailDomain(), token);
+
+        return result.Message.IsSuccess
+            ? await next(context, token)
+            : CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
+                EmailConstants.EmailDomainIsNotValid, result.Message.Errors);
     }
 }
 ```
 
-Endpoint usage example (Endpoints/Articles/CreateArticleEndpoint.cs)
+Terminal step: produce the DTO with `Maybe.Create(...)`:
+
 ```csharp
-using MinimalStepifiedSystem.Attributes;
-
-public class CreateArticleEndpoint : Endpoint<CreateArticleRequest, ApiResponse>
-{
-    [StepifiedProcess(Steps = [ typeof(ValidateArticleTitleStep), typeof(PersistArticleStep), typeof(PublishArticleEventStep) ])]
-    protected CreateArticleDelegate CreateArticle { get; } = default!;
-
-    public override void Configure()
-    {
-        Post("articles");
-        Version(1);
-        SerializerContext(CoreSerializationContext.Default);
-    }
-
-    public override async Task HandleAsync(CreateArticleRequest req, CancellationToken ct)
-    {
-        var ctx = new CreateArticleContext(req);
-        var maybe = await CreateArticle(ctx, ct);
-        var op = maybe is Some<CreateArticleOperationResult> s ? s.Value : new CreateArticleOperationResult { HttpStatusCode = 500, Response = ErrorResponseUtilities.ApiResponseWithErrors(["Unknown error"], 500) };
-        await Send.ResponseAsync(op.Response, op.HttpStatusCode, ct);
-    }
-}
+return Maybe.Create<RequestReaderAccountCreationResultDto>(new(responseObj.Id));
 ```
 
-Registration notes
-- Register each step class and repository/service used by steps in `Program.cs` with `builder.Services.AddScoped<ValidateArticleTitleStep>();` and register the repository interface/impl.
-- Keep steps small and focused (single responsibility) so they are reusable and easy to test.
+## Step 4 — Endpoint attribute
+
+```csharp
+[StepifiedProcess(Steps = [
+    typeof(ValidateReaderAccountEmailDomainStep),
+    typeof(ValidateReaderAccountNotExistsStep),
+    typeof(ValidateReaderAccountTempRecordNotExistsStep),
+    typeof(ValidateReaderAccountNickNameWasNotTakenStep),
+    typeof(CreateReaderAccountTempUserStep),
+])]
+protected RequestCreateReaderAccountDelegate RequestCreateReaderAccount { get; }
+```
+
+Then in `HandleAsync`: build the context, invoke the delegate property, send
+with the `ToApiResponse`/`ToStatusCode` envelope (see `fastendpoints-endpoints` skill).
+
+## Step 5 — Register every step as scoped
+
+In `Extensions/Startup/CoreServicesConfigurationExtensions.cs` → `AddCoreServicesConfiguration()`:
+
+```csharp
+services.AddScoped<ValidateReaderAccountEmailDomainStep>();
+services.AddScoped<CreateReaderAccountTempUserStep>();
+```
+
+When two services in one project have same-named steps, qualify the namespace
+(`services.AddScoped<Steps.ReaderAccount.Request.ValidateReaderAccountNotExistsStep>();`).
+
+## Shared steps for duplicated logic
+
+When several steps repeat the same logic, extract it — do not copy. Shared
+helpers live in `Steps/<Feature>/Shared/`, are static classes named with the
+**`...SharedStep` suffix**, and expose one method taking all required
+dependencies. Real example:
+`Steps/ReaderAccount/Shared/ValidateReaderAccountNotExistsSharedStep.cs` —
+`CheckAsync(IRequestClient<ValidateUserExists> requestClient, ValidateUserExists request, CancellationToken token)`
+returning `IMaybe<bool>`; the Request and Confirm flows each wrap that bool
+into their own DTO result.
+
+## Checkpointed steps (durable flows)
+
+Endpoints tagged `ApiTagConstants.Persist` get idempotency + replay via the
+shared processors; mark resumeable steps with `[CheckpointedStep]` (AspectInjector
+aspect → `StepCheckpointCoordinator` snapshots the context, which must implement
+`IStepCheckpointState` and be registered in the service's `*CheckpointJsonContext`).
+Real anchors: `Endpoints/ReaderAccounts/ConfirmCreateByEmailEndpoint.cs` (tags),
+`Context/ConfirmCreateReaderAccountContext.cs` (snapshot state),
+`Steps/ReaderAccount/Confirm/CreateReaderAccountUserStep.cs` (`[CheckpointedStep]`),
+`ReadersCheckpointJsonContext` registered as `IJsonTypeInfoResolver` in `Program.cs`.
+
+## Reference implementations
+
+- Full flow: `snowcoreBlog.Backend/BusinessServices/ReadersManagement/Endpoints/ReaderAccounts/RequestCreateByEmailEndpoint.cs` + `Delegates/`, `Context/`, `Steps/ReaderAccount/Request/`
+- Request/response step into IAM: `snowcoreBlog.Backend/BusinessServices/AdminsManagement/Steps/Auth/ConfirmLogin/ValidateAdminExistsInIamStep.cs`
+- Step registration: `snowcoreBlog.Backend/BusinessServices/ReadersManagement/Extensions/Startup/CoreServicesConfigurationExtensions.cs`

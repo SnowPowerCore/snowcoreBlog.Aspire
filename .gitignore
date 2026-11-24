@@ -364,9 +364,5 @@ FodyWeavers.xsd
 
 **/skills-lock.json
 .agents/**
-.clinerules/**
-.cursor/**
+.claude/**
 .github/**
-.opencode/**
-.windsurf/**
-AGENTS.md

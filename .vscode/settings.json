@@ -15,5 +15,13 @@
     "blazorWasmDebug.browser": "debug",
     "blazorWasmDebug.browserDebugTarget": "edge",
     "blazorWasmDebug.autoApplyHotReload": true,
-    "blazorWasmDebug.serverReadyTimeoutMs": 75000
+    "blazorWasmDebug.serverReadyTimeoutMs": 75000,
+    "chat.instructionsFilesLocations": {
+        ".claude/rules": false,
+        "~/.claude/rules": false
+    },
+    "chat.agentSkillsLocations": {
+        "~/.claude/skills": false,
+        ".claude/skills": false
+    }
 }

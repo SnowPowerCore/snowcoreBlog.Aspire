@@ -39,7 +39,7 @@
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\ServiceNotifications\snowcoreBlog.Backend.ServiceNotifications.csproj" />
     <ProjectReference Include="snowcoreBlog.Backend\Shared\Services\Documents\snowcoreBlog.Backend.Documents.csproj" />
     <ProjectReference Include="snowcoreBlog.Frontend\Host\snowcoreBlog.Frontend.Host.csproj" />
-    <ProjectReference Include="snowcoreBlog.AdminFrontend\Host\snowcoreBlog.AdminFrontend.Host.csproj" />
+    <ProjectReference Include="snowcoreBlog.AdminFrontend\snowcoreBlog.AdminFrontend.csproj" />
     <ProjectReference Include="snowcoreBlog.Console\App\snowcoreBlog.Console.App.csproj" />
   </ItemGroup>
 </Project>

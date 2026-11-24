@@ -1,81 +1,114 @@
-MaybeResults (preferred result / error pattern)
+---
+name: mayberesults-used
+description: >-
+  How-to for the MaybeResults pattern (NuGet WTorricos.Results, namespace
+  MaybeResults): [None] source-generated typed errors, Maybe.Create successes,
+  IMaybe/Some/INone semantics, the ToApiResponse/ToStatusCode envelope mapping
+  and its caveats (no 404, ICollection DataCount), and DataResult<T> payloads
+  over MassTransit. Use when modeling operation results or errors anywhere in
+  the backend.
+scope: project
+---
 
-Purpose
-- Explain the repo-wide convention of using the `MaybeResults` source-generator-driven pattern for operation results and errors.
+# MaybeResults
 
-Why we use it
-- `MaybeResults` gives a compact way to model operations that can return either an operation result (Some&lt;T&gt;) or a generated "none/error" type. It leads to consistent, source-generated types and simple pattern checks in endpoints/steps.
+Use this skill to model operation results and errors in backend code — the
+repo-wide pattern for anything that can succeed or fail without throwing.
 
-Common patterns
-- Handlers / delegates typically return `Task<IMaybe<TOperationResult>>`.
-- Steps and service code use `Maybe.Create(...)` to return a concrete operation result instance early.
-- Endpoints typically form HTTP responses using the `ToApiResponse` and `ToStatusCode` extension methods on `IMaybe<T>`. When using the StepifiedProcess pattern you can prefer the compact form below which automatically creates the correct `ApiResponse` depending on whether the result is `Some<T>` or a generator-backed `None`:
+## When to Invoke
 
-```csharp
-// endpoint-level pattern (preferred when using stepified delegates)
-var result = await SomeDelegate(context, ct);
-await Send.ResponseAsync(
-    result?.ToApiResponse(serializerOptions: JsonOptions.Value.SerializerOptions),
-    result?.ToStatusCode() ?? (int)System.Net.HttpStatusCode.InternalServerError,
-    ct);
-```
+- Writing steps/services/delegates that return `IMaybe<T>`
+- Creating or reusing error types
+- Deciding what an endpoint should return for a failure
 
-If you are not using the StepifiedProcess pattern (for example a plain service method that returns a DTO or throws), you will need to construct the `ApiResponse` and status code manually.
+## When NOT to Invoke
 
-Cross-reference
-- The repository-wide standardized `ApiResponse` contract and the recommended endpoint pattern are recorded in the FastEndpoints Endpoint Creation skill (`fastendpoints-endpoints/SKILL.md`). See that skill for the required shape and the recommended endpoint snippet for returning `ApiResponse`.
+- Frontend-side unwrapping (use `ToData<T>` on `IApizrResponse<ApiResponse>` —
+  see `frontend-api-clients` skill)
 
-Analysis: `ToApiResponse` extension
-- Signature: `public static ApiResponse ToApiResponse<T>(this IMaybe<T> result, JsonSerializerOptions serializerOptions = null) where T : notnull`.
-- Behavior summary:
-    - If `result is Some<T> success` then:
-        - `dataCount` is computed as `success.Value is ICollection e ? e.Count : 1`.
-        - `Data` is produced via `success.Value.ToJsonDocument(serializerOptions)` (uses `JsonSerializer.SerializeToDocument`).
-        - Returns `new ApiResponse(Data, DataCount, 0)` (business `StatusCode` == 0, `Errors` empty).
-    - If `result is INone<T> error` then:
-        - `Errors` are flattened from `error.Details` as `"{Code}: {Description}"`; if empty the extension falls back to `error.Message`.
-        - Returns `new ApiResponse(default, 0, -1, errors)` (business `StatusCode` == -1).
-    - Otherwise returns a fallback `ApiResponse` with `Errors` containing `ApiResponseConstants.UnknownError`.
+## Background
 
-- Important notes & recommendations:
-    - `ToApiResponse` encodes a domain/business `StatusCode` (0/-1). Use `ToStatusCode()` to produce the HTTP status code when sending the response.
-    - `ToApiResponse` serializes the payload to a `JsonDocument` using the provided `JsonSerializerOptions` (source-gen options should be passed when available).
-    - `DataCount` only detects counts for types implementing `ICollection`. If you return lazy `IEnumerable<T>` choose to materialize/count before returning or expose an `ICollection` to ensure an accurate `DataCount`.
-    - Prefer using `result?.ToApiResponse(...)` + `result?.ToStatusCode()` in endpoints for consistent, compact responses; only build `ApiResponse` manually when you need a custom shape or are outside the stepified flow.
+`WTorricos.Results` 2.0.4 provides `IMaybe<T>` with two shapes:
+`Some<T>` (success, carries `Value`) and `INone<T>` (typed failure). The
+`[None]` attribute triggers a source generator that turns a marker record into
+a GENERIC class with a static `Create` factory. The envelope extensions live
+in `snowcoreBlog.Universal/PublicApi/Extensions/` (`ApiResponseExtensions.cs`,
+`StatusCodeExtensions.cs`).
 
-Defining error/result types (source-gen)
-- Use attributes the generator expects (examples below). These create small, explicit result/error types that work well in pattern matching.
+## Rule 1 — Declare typed errors with `[None]`, reuse before creating
 
-Example error record (ErrorResults/ReaderAccountNotExistsError.cs)
 ```csharp
 using MaybeResults;
 
+namespace snowcoreBlog.Backend.ReadersManagement;
+
 [None]
-public partial record ReaderAccountNotExistsError;
+public partial record CreateReaderAccountError;
 ```
 
-Example returned operation result (models/RefreshReaderJwtPairOperationResult.cs)
+The generator emits a generic class. Call sites supply the target DTO type:
+
 ```csharp
-public sealed record RefreshReaderJwtPairOperationResult
-{
-    public int HttpStatusCode { get; init; }
-    public ApiResponse Response { get; init; } = default!;
-}
+return CreateReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
+    "Reader account could not be created.",            // message (required)
+    response.Message.Errors);                           // optional error details
 ```
 
-Usage in a step
+**Never** `XError.Create<T>(...)` (non-generic method — CS0308), never
+stringly-typed or exception-based expected failures. Grep `ErrorResults/` for
+an existing record before adding a new one; 404-vs-400 distinction is an
+endpoint concern (see below), not an error-type concern.
+
+## Rule 2 — Successes via `Maybe.Create`
+
 ```csharp
-if (record == null)
-    return Maybe.Create(new RefreshReaderJwtPairOperationResult
-    {
-        HttpStatusCode = 404,
-        Response = ErrorResponseUtilities.ApiResponseWithErrors(["Not found"], 404)
-    });
-
-// Continue to next step
-return await next(context, token);
+return Maybe.Create<RequestReaderAccountCreationResultDto>(new(responseObj.Id));
+return Maybe.Create(items.Select(static a => a.ToDto()).ToList());   // collections OK
 ```
 
-Notes for agents
-- Prefer generator-backed `None` error records and `Maybe.Create(...)` for early returns instead of throwing exceptions for expected validation/flow failures.
-- Keep operation result types simple and serializable by the source-gen serializer.
+## Rule 3 — Know the envelope mapping exactly
+
+`ToApiResponse<T>(this IMaybe<T>, JsonSerializerOptions?)`:
+- `Some<T>` → `new ApiResponse(data: Value.ToJsonDocument(options), dataCount: Value is ICollection c ? c.Count : 1, statusCode: 0)`.
+- `INone<T>` → `new ApiResponse(default, 0, -1, errors)` where errors are `"{Code}: {Description}"` per detail, falling back to `Message` when details are empty.
+- Neither shape (null result) → the `UnknownError` envelope (`ApiResponseConstants.UnknownError`).
+
+`ToStatusCode<T>(this IMaybe<T>)`: `Some<T>` → **200**, `INone<T>` → **400**,
+anything else → **500**. There is **no 404** — send it manually when needed
+(reference: `GetNotificationByIdEndpoint`).
+
+**`DataCount` caveat:** only `ICollection` is counted. A lazy `IEnumerable<T>`
+reports `1` — materialize (`ToList()`) before `Maybe.Create` for collections.
+
+## Rule 4 — MassTransit payloads use `DataResult<T>`
+
+Cross-service request/response messages carry `DataResult<T>` — a plain record
+with `Value` + `Errors: IReadOnlyList<NoneDetail>?`; success is `Errors == null`
+(`result.Message.IsSuccess`). Beware: a non-null but EMPTY `Errors` list is
+neither success (`IsSuccess == false`) nor `IsFailed == true`, so do not treat
+`IsFailed` as the negation of `IsSuccess`. Steps consume it via
+`IRequestClient<T>.GetResponse<DataResult<TResult>>(...)` and translate failures
+into typed `[None]` errors for their own flow.
+
+```csharp
+var response = await client.GetResponse<DataResult<TempUserCreationResult>>(
+    context.CreateRequest.ToCreateTempUser(), token);
+
+if (!response.Message.IsSuccess)
+    return CreateUserForReaderAccountError<RequestReaderAccountCreationResultDto>.Create(
+        ReaderAccountUserConstants.TempUserForReaderAccountUnableToCreateUpdateError,
+        response.Message.Errors);
+```
+
+## Serialization
+
+Any DTO/`DataResult` flowing through STJ must have a
+`[JsonSerializable]` entry in `CoreSerializationContext`
+(`snowcoreBlog.Backend/Shared/Infrastructure/Context/CoreSerializationContext.cs`)
+— the runtime has no reflection fallback.
+
+## Reference implementations
+
+- Error record + usage: `snowcoreBlog.Backend/BusinessServices/ReadersManagement/ErrorResults/CreateReaderAccountError.cs`, `Steps/ReaderAccount/Request/CreateReaderAccountTempUserStep.cs`
+- Extensions: `snowcoreBlog.Backend/snowcoreBlog.Universal/PublicApi/Extensions/ApiResponseExtensions.cs`, `StatusCodeExtensions.cs`
+- Inline maybe in a direct endpoint: `snowcoreBlog.Backend/BusinessServices/AdminsManagement/Endpoints/Admins/SearchAdminAccountsEndpoint.cs`
