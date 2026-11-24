@@ -45,9 +45,6 @@
     <!-- Fody Packages -->
     <PackageVersion Include="ConfigureAwait.Fody" Version="3.4.1" />
     <PackageVersion Include="Fody" Version="6.9.3" />
-    <!-- FastSharp -->
-    <PackageVersion Include="FastSharp.Models" Version="1.0.0-beta.16" />
-    <PackageVersion Include="FastSharp.Modules" Version="1.0.0-beta.16" />
     <!-- FastEndpoints Packages -->
     <PackageVersion Include="FastEndpoints" Version="8.3.0" />
     <PackageVersion Include="FastEndpoints.Generator" Version="8.3.0" />
@@ -60,6 +57,11 @@
     <PackageVersion Include="Fido2.Models" Version="4.2.0" />
     <!-- FluentValidation -->
     <PackageVersion Include="FluentValidation" Version="12.1.1" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <!-- snowcoreBlog backend shared packages (published to the local feed by snowcoreBlog.Backend/pack-shared-packages.ps1) -->
+    <PackageVersion Include="snowcoreBlog.Backend.Shared.Core" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.PublicApi" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.Backend.Infrastructure" Version="0.1.0" />
     <!-- TickerQ Packages (pinned to 10.4.0 = last MIT/Apache dual-licensed release; newer versions are commercial).-->
     <PackageVersion Include="TickerQ" Version="10.4.0" />
     <PackageVersion Include="TickerQ.Dashboard" Version="10.4.0" />

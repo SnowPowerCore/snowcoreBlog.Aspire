@@ -13,10 +13,10 @@
     <Project Path="snowcoreBlog.Backend/BusinessServices/ReadersManagement/snowcoreBlog.Backend.ReadersManagement.csproj" />
     <Project Path="snowcoreBlog.Backend/BusinessServices/AdminsManagement/snowcoreBlog.Backend.AdminsManagement.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Shared.Core/snowcoreBlog.Backend.Shared.Core.csproj" />
-    <Project Path="snowcoreBlog.Backend/Shared/ReadersManagement.Core/snowcoreBlog.Backend.ReadersManagement.Core.csproj" />
-    <Project Path="snowcoreBlog.Backend/Shared/Articles.Core/snowcoreBlog.Backend.Articles.Core.csproj" />
-    <Project Path="snowcoreBlog.Backend/Shared/AuthorsManagement.Core/snowcoreBlog.Backend.AuthorsManagement.Core.csproj" />
-    <Project Path="snowcoreBlog.Backend/Shared/AdminsManagement.Core/snowcoreBlog.Backend.AdminsManagement.Core.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/ReadersManagement.Core/snowcoreBlog.Backend.ReadersManagement.Core.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/Articles.Core/snowcoreBlog.Backend.Articles.Core.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/AuthorsManagement.Core/snowcoreBlog.Backend.AuthorsManagement.Core.csproj" />
+    <Project Path="snowcoreBlog.Backend/BusinessServices/AdminsManagement.Core/snowcoreBlog.Backend.AdminsManagement.Core.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/ServiceNotifications.Core/snowcoreBlog.Backend.ServiceNotifications.Core.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Stripe.Core/snowcoreBlog.Backend.Stripe.Core.csproj" />
     <Project Path="snowcoreBlog.Backend/Shared/Documents.Core/snowcoreBlog.Backend.Documents.Core.csproj" />
