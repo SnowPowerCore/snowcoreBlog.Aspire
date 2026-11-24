@@ -61,3 +61,10 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# AI tooling: shell scripts and git hooks must stay LF so they execute
+# under Git Bash / sh on every platform.
+###############################################################################
+*.sh text eol=lf
+.githooks/** text eol=lf

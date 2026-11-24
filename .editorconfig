@@ -26,3 +26,11 @@ dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case
 
 # Prefer primary constructors
 csharp_style_prefer_primary_constructors = true:suggestion
+
+# Null checks: use the default-value constant pattern with the left-hand side's type
+# ('is default(T)' / 'is not default(T)') instead of the equality operator,
+# ReferenceEquals, or the bare null pattern. IDE0041 bans the ReferenceEquals(x, null)
+# and casted (object)x == null forms; plain typed '== null' must be avoided at
+# code-writing time (see code-style rule documentation). Note: IDE0041's code fixer
+# emits the bare 'is null' form - hand-adjust fixes to the default(T) form.
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion

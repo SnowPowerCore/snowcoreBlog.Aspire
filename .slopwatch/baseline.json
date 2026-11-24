@@ -1,287 +1,305 @@
 {
-  "version": 1,
-  "createdAt": "2026-11-16T19:44:20.8310734+00:00",
-  "updatedAt": "2026-11-16T19:44:20.8336608+00:00",
-  "description": "Initial baseline created by 'slopwatch init' on 2026-11-16 19:44:20 UTC",
+  "version": 2,
+  "createdAt": "2026-11-22T08:08:35.2765688+00:00",
+  "updatedAt": "2026-11-22T08:08:35.2780272+00:00",
+  "description": "Initial baseline created by 'slopwatch init' on 2026-11-22 08:08:35 UTC",
   "entries": [
     {
-      "hash": "4e96211c0d38dffd",
+      "hash": "be8338852081e846",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Services/ArticlesApplicationLaunchService.cs",
       "lineNumber": 47,
       "codeSnippet": "catch\r\n                {\r\n                    // swallow - seeding should not crash app startup\r\n                }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8334478+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2778302+00:00"
     },
     {
-      "hash": "17f212784587ba0c",
+      "hash": "008829afcfa5ee87",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Services/ArticlesApplicationLaunchService.cs",
       "lineNumber": 53,
       "codeSnippet": "catch\r\n        {\r\n            // ignore errors during application launch seeding\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335268+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779094+00:00"
     },
     {
-      "hash": "82c35ac40714fa79",
+      "hash": "1f3a8bce20c677b7",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Steps/Articles/Create/SaveArticleStep.cs",
       "lineNumber": 24,
       "codeSnippet": "catch\r\n            {\r\n                // Eviction is best-effort; a stale entry expires via TTL anyway.\r\n            }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335329+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779154+00:00"
     },
     {
-      "hash": "553a6044ef17c144",
+      "hash": "d1c38dac69eb3a36",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Steps/Articles/Get/GetArticleBySlugStep.cs",
       "lineNumber": 33,
       "codeSnippet": "catch { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335364+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779193+00:00"
     },
     {
-      "hash": "fb223e59a598f547",
+      "hash": "3edb43a18515dcc5",
+      "ruleId": "SW003",
+      "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Steps/Articles/Get/GetArticleBySlugStep.cs",
+      "lineNumber": 63,
+      "codeSnippet": "catch { }",
+      "message": "Empty catch block swallows exceptions without handling",
+      "baselinedAt": "2026-11-22T08:08:35.277923+00:00"
+    },
+    {
+      "hash": "ef154dc720b2bc27",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Steps/Articles/Get/GetArticlesCachedStep.cs",
       "lineNumber": 31,
       "codeSnippet": "catch { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335442+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779259+00:00"
     },
     {
-      "hash": "a71740658c8d34c5",
+      "hash": "f9936ceaf82445c2",
+      "ruleId": "SW003",
+      "filePath": "snowcoreBlog.Backend/BusinessServices/Articles/Steps/Articles/Get/GetArticlesCachedStep.cs",
+      "lineNumber": 59,
+      "codeSnippet": "catch { }",
+      "message": "Empty catch block swallows exceptions without handling",
+      "baselinedAt": "2026-11-22T08:08:35.2779355+00:00"
+    },
+    {
+      "hash": "5763736756d9d14a",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/AuthorsManagement/Services/AuthorsManagementApplicationLaunchService.cs",
       "lineNumber": 29,
       "codeSnippet": "catch { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335502+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779385+00:00"
     },
     {
-      "hash": "bbd820aab8794c39",
+      "hash": "d9757d28bd7baa7f",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/ReadersManagement/Services/ReaderAccountTokenPairIssuer.cs",
       "lineNumber": 165,
       "codeSnippet": "catch (OperationCanceledException) { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335539+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779424+00:00"
     },
     {
-      "hash": "5a7afc53f91c221d",
+      "hash": "02bc63f42c2903f1",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/BusinessServices/ReadersManagement/Services/ReaderAccountTokenPairIssuer.cs",
       "lineNumber": 180,
       "codeSnippet": "catch { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335602+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.277945+00:00"
     },
     {
-      "hash": "473b668d8cd7f685",
+      "hash": "398d81997aea6739",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Gateway.Middleware/Middleware/ApiAccessRestrictionMiddleware.cs",
       "lineNumber": 69,
       "codeSnippet": "catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested) { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335637+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.277949+00:00"
     },
     {
-      "hash": "fe19432f57c2d51a",
+      "hash": "2c12b6fc8bfbc9b6",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Infrastructure/RequestPersistence/PersistRequestRecoveryJobs.cs",
       "lineNumber": 36,
       "codeSnippet": "catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)\r\n        {\r\n            // Host shutdown — the next scheduled occurrence picks the pass back up.\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335832+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779534+00:00"
     },
     {
-      "hash": "317a71cc50f77a4d",
+      "hash": "e6626bed093b291c",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions/GatewayIntegration/ApiAccessRestrictionsSnapshotRefresher.cs",
       "lineNumber": 22,
       "codeSnippet": "catch (OperationCanceledException) when (ct.IsCancellationRequested) { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335866+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.277957+00:00"
     },
     {
-      "hash": "bfb9bb65b1e2aba2",
+      "hash": "683d66db9034270d",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ApiAccessRestrictions/GatewayIntegration/ApiAccessRestrictionsSnapshotRefreshJob.cs",
       "lineNumber": 25,
       "codeSnippet": "catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)\r\n        {\r\n            // Host shutdown — next occurrence refreshes again.\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335917+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779609+00:00"
     },
     {
-      "hash": "1ff2f26f6938572d",
+      "hash": "a5c561d0bb4a5704",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ServiceNotifications/Steps/Notification/Get/GetActiveNotificationsCachedStep.cs",
       "lineNumber": 40,
       "codeSnippet": "catch { /* Cache miss or deserialization error, fetch from DB */ }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8335954+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779642+00:00"
     },
     {
-      "hash": "c7d2960054342a88",
+      "hash": "cc69b98e6175c91e",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ServiceNotifications/Steps/Notification/Get/GetActiveNotificationsCachedStep.cs",
       "lineNumber": 53,
       "codeSnippet": "catch { /* Caching failure should not break the request */ }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.833598+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779672+00:00"
     },
     {
-      "hash": "61ff4fa7cead3390",
+      "hash": "09ed1e736114c17a",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ServiceNotifications/Steps/Notification/Get/GetActiveNotificationsForUserStep.cs",
       "lineNumber": 94,
       "codeSnippet": "catch { /* deserialization error - fall through to provider calls */ }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336008+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779701+00:00"
     },
     {
-      "hash": "8c9e1af17b1a45e4",
+      "hash": "77cdef0d97c014e2",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ServiceNotifications/Steps/Notification/Get/GetActiveNotificationsForUserStep.cs",
       "lineNumber": 123,
       "codeSnippet": "catch (OperationCanceledException) { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.833604+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779731+00:00"
     },
     {
-      "hash": "49e069dcc80642fc",
+      "hash": "361fa8f6d7822d00",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ServiceNotifications/Steps/Notification/Get/GetActiveNotificationsForUserStep.cs",
       "lineNumber": 147,
       "codeSnippet": "catch { /* caching failure should not break the request */ }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336066+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779763+00:00"
     },
     {
-      "hash": "9bbd6226614126dd",
+      "hash": "2e42a979f4e90cc3",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/Shared/Services/ServiceNotifications/Steps/Notification/Get/GetActiveNotificationsForUserStep.cs",
       "lineNumber": 151,
       "codeSnippet": "catch { }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.833609+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779786+00:00"
     },
     {
-      "hash": "a389fa837c2f09b7",
+      "hash": "5d30b596a5edb993",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Backend/snowcoreBlog.Universal/UniversalModules/HttpClientInterception.Implementations/Extensions/HttpClientInterceptorExtensions.cs",
       "lineNumber": 34,
       "codeSnippet": "catch (InvalidOperationException e) when (e.Source == \"Microsoft.Extensions.DependencyInjection\" && e.HResult == -2146233079)\r\n                {\r\n                }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336135+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779829+00:00"
     },
     {
-      "hash": "2756538abda43d07",
+      "hash": "b6b23903dd025e1c",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Console/App/Steps/Launch/EveryTime/PrefetchClientStateStep.cs",
       "lineNumber": 36,
       "codeSnippet": "catch\r\n        {\r\n            // A cold backend must not block the launch: screens re-fetch lazily.\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336173+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779859+00:00"
     },
     {
-      "hash": "d598b24eefb7c1f5",
+      "hash": "b29f9bd6dafa0196",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Console/snowcoreBlog.Universal/UniversalModules/HttpClientInterception.Implementations/Extensions/HttpClientInterceptorExtensions.cs",
       "lineNumber": 34,
       "codeSnippet": "catch (InvalidOperationException e) when (e.Source == \"Microsoft.Extensions.DependencyInjection\" && e.HResult == -2146233079)\r\n                {\r\n                }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336214+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779897+00:00"
     },
     {
-      "hash": "b742481fe27b0063",
+      "hash": "9ac4ed9eed054c56",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/Articles/Components/Fluent/MarkdownEditor.razor",
       "lineNumber": 125,
       "codeSnippet": "catch (JSDisconnectedException)\r\n            {\r\n            }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336258+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779932+00:00"
     },
     {
-      "hash": "e02a6c808b30e5b4",
+      "hash": "fdd6cd97c3991b77",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/Articles/Components/Fluent/MarkdownEditor.razor",
       "lineNumber": 157,
       "codeSnippet": "catch (OperationCanceledException)\r\n            {\r\n            }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336284+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779967+00:00"
     },
     {
-      "hash": "d6455c7efa9053c9",
+      "hash": "2736d0ddb7ad60bf",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/Articles/Components/Fluent/MarkdownEditor.razor",
       "lineNumber": 177,
       "codeSnippet": "catch (JSException)\r\n            {\r\n            }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336309+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2779992+00:00"
     },
     {
-      "hash": "b3b868fbd1e58b32",
+      "hash": "8b44f7d4a36c9c53",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/Articles/Pages/ArticlesHomePage.razor",
       "lineNumber": 61,
       "codeSnippet": "catch (JSDisconnectedException)\r\n\t\t\t{\r\n\t\t\t}",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336349+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2780033+00:00"
     },
     {
-      "hash": "a2e4b19fe99d4b87",
+      "hash": "127c583d212aaf56",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/Articles/Pages/Fluent/CreateArticlePage.razor",
       "lineNumber": 248,
       "codeSnippet": "catch (OperationCanceledException)\r\n        {\r\n            // cancelled by user navigating away — nothing to report\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336385+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2780075+00:00"
     },
     {
-      "hash": "e0e8062e38b806c3",
+      "hash": "2548d0fc34bff4ab",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/AuthorsManagement/Pages/Fluent/BecomeAuthorPage.razor",
       "lineNumber": 288,
       "codeSnippet": "catch\r\n        {\r\n            // Even if the refresh fails, the force reload below re-resolves auth state.\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.833643+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2780109+00:00"
     },
     {
-      "hash": "106c744fa3845014",
+      "hash": "e36f39f15c77f5e8",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/SharedComponents/Components/Fluent/AnimatedStatusLabel.razor.cs",
       "lineNumber": 126,
       "codeSnippet": "catch (OperationCanceledException)\r\n        {\r\n            // The component was disposed mid-animation; stop quietly.\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336486+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2780165+00:00"
     },
     {
-      "hash": "d91e6b99b92bfd87",
+      "hash": "4836f1f176b4b9ac",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/Modules/SharedComponents/Components/Fluent/FloatingCard.razor",
       "lineNumber": 50,
       "codeSnippet": "catch (JSDisconnectedException)\r\n        {\r\n            // Circuit gone; observer cleanup happens implicitly.\r\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336522+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2780194+00:00"
     },
     {
-      "hash": "7c7ea95286064ae0",
+      "hash": "ebcf3ad5a3cab99f",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/snowcoreBlog.Frontend.WasmForDebugging/Providers/WasmCookiesAuthenticationStateProvider.cs",
       "lineNumber": 141,
       "codeSnippet": "catch\n        {\n            // Never let a timer callback crash the host; the next state resolution\n            // will recover or show the signed-out state.\n        }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336562+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.2780229+00:00"
     },
     {
-      "hash": "3b24267981d047c9",
+      "hash": "9481a099ca8d8a21",
       "ruleId": "SW003",
       "filePath": "snowcoreBlog.Frontend/snowcoreBlog.Universal/UniversalModules/HttpClientInterception.Implementations/Extensions/HttpClientInterceptorExtensions.cs",
       "lineNumber": 34,
       "codeSnippet": "catch (InvalidOperationException e) when (e.Source == \"Microsoft.Extensions.DependencyInjection\" && e.HResult == -2146233079)\r\n                {\r\n                }",
       "message": "Empty catch block swallows exceptions without handling",
-      "baselinedAt": "2026-11-16T19:44:20.8336608+00:00"
+      "baselinedAt": "2026-11-22T08:08:35.278027+00:00"
     }
   ]
 }
