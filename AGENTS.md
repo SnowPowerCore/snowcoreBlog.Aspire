@@ -54,7 +54,7 @@ The root repo is the orchestrator; the products live in git submodules
 | `snowcoreBlog.Backend` | snowcoreBlog.Backend | `BusinessServices/` (Articles, AuthorsManagement, ReadersManagement, AdminsManagement), `Shared/Services/` (IAM, Email, Push, Documents, Stripe, UrlShortener, ServiceNotifications, ApiAccessRestrictions, AspireYarpGateway, ...), `Shared/Shared.Core` (shared kernel) + per-service `Shared/<Service>.Core` projects (Articles.Core, ReadersManagement.Core, AuthorsManagement.Core, AdminsManagement.Core, ServiceNotifications.Core, Stripe.Core, Documents.Core, UrlShortener.Core, ApiAccessRestrictions.Core) |
 | `snowcoreBlog.Frontend` | snowcoreBlog.Frontend | `Host`, `Client`, `ClientShared`, `Core`, `Infrastructure`, `Modules`, `WasmForDebugging` + per-area `*.Tests` |
 | `snowcoreBlog.Console` | snowcoreBlog.Console | `App` (RazorConsole TUI) |
-| `snowcoreBlog.App` | snowcoreBlog.App | mobile client (declared in `.gitmodules`; clone only when needed) |
+| `snowcoreBlog.App` | snowcoreBlog.App | mobile client (.NET MAUI; single `snowcoreBlog.App/snowcoreBlog.App` project) |
 
 `AdminFrontend` (single server-only Blazor Web App project — no WASM
 client) lives **in this root repo**.

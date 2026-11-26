@@ -61,6 +61,7 @@
   </Folder>
   <Folder Name="/Apps/">
     <Project Path="snowcoreBlog.Console/App/snowcoreBlog.Console.App.csproj" />
+    <Project Path="snowcoreBlog.App/snowcoreBlog.App/snowcoreBlog.App.csproj" />
   </Folder>
   <Folder Name="/Tests/Core/">
     <Project Path="snowcoreBlog.Backend/Tests/Core.Tests/snowcoreBlog.Backend.Shared.Core.Tests.csproj" />
