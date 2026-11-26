@@ -70,6 +70,23 @@ Cross-repo contracts to keep in mind:
 - `Gateway.Middleware`/`AspireYarpGateway` couple to `ApiAccessRestrictions`
   contracts; root `Program.cs` auth-policy literals mirror backend
   `SecurityConstants` by hand.
+- **Backend consumes cross-service code as NuGet packages from the local feed.**
+  `snowcoreBlog.Backend/pack-shared-packages.ps1` packs into
+  `..\..\local-nuget-feed` (one level above the Aspire root, registered in the
+  root `nuget.config` under `local`, mapped to the `snowcoreBlog.*` pattern):
+  `snowcoreBlog.Backend.Shared.Core`, `snowcoreBlog.PublicApi`,
+  `snowcoreBlog.Backend.Infrastructure`, `snowcoreBlog.ServiceDefaults`,
+  `snowcoreBlog.ApplicationLaunch(.Implementations)`,
+  `snowcoreBlog.Backend.{IAM,Email,AspireYarpGateway}.Core`.
+  A microservice `PackageReference`s ServiceDefaults/PublicApi/Infrastructure,
+  the ApplicationLaunch module and any cross-service `<Service>.Core`; the only
+  remaining `ProjectReference`s are its own `<Service>.Core` (tests keep
+  ProjectReferences too). One exception: `Gateway.Middleware` still
+  ProjectReferences the full `ApiAccessRestrictions` service (the gateway runs
+  its gateway-integration implementations in-process).
+  Bump `Version` in `pack-shared-packages.ps1` + the `PackageVersion` entries in
+  the root `Directory.Packages.props` **together** whenever a packed project
+  changes, then re-run the pack script.
 
 ## First-time setup
 

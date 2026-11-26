@@ -62,6 +62,12 @@
     <PackageVersion Include="snowcoreBlog.Backend.Shared.Core" Version="0.1.0" />
     <PackageVersion Include="snowcoreBlog.PublicApi" Version="0.1.0" />
     <PackageVersion Include="snowcoreBlog.Backend.Infrastructure" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.ServiceDefaults" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.ApplicationLaunch" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.ApplicationLaunch.Implementations" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.Backend.IAM.Core" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.Backend.Email.Core" Version="0.1.0" />
+    <PackageVersion Include="snowcoreBlog.Backend.AspireYarpGateway.Core" Version="0.1.0" />
     <!-- TickerQ Packages (pinned to 10.4.0 = last MIT/Apache dual-licensed release; newer versions are commercial).-->
     <PackageVersion Include="TickerQ" Version="10.4.0" />
     <PackageVersion Include="TickerQ.Dashboard" Version="10.4.0" />
