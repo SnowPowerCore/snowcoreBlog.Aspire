@@ -278,9 +278,10 @@ consumer repo — mirror changes into all three (see Multi-repo architecture).
 
 ## Branching
 
-For branch naming rules (allowed namespaces, release branch shape, personal dev handles), see **`.ai/rules/branch-naming.md`**.
-
-For change flow rules, merge vs cherry-pick policy, and propagation guidelines, see **`.ai/rules/git-flow.md`**.
+All work is done on `main` in this repo and in every submodule, unless the
+developer explicitly requests a dedicated branch for a change. For
+cross-repo propagation guidelines (mirroring, pointer bumps, gateway
+coupling, serialization, frontend wiring), see **`.ai/rules/git-flow.md`**.
 
 ## Key dependencies
 

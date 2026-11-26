@@ -23,8 +23,8 @@ Use this skill to create a NEW `.ai/rules/<name>.md` file.
 
 - Updating an EXISTING rule — use the `update-rules-skills-doc` skill
 - Style/lint rules — `lint-rule-manager` owns that three-tier system
-- Naming/branching/flow process rules — `branch-naming.md` / `git-flow.md`
-  already exist; extend those instead of parallel files
+- Flow process rules — `git-flow.md` already exists; extend that instead of
+  a parallel file
 
 ## Background
 
@@ -45,7 +45,7 @@ developer (interactive question flow) instead of codifying a guess.
 ## Step 2 — Name + frontmatter
 
 File: `.ai/rules/<kebab-name>-rules.md` (domain rules carry the `-rules`
-suffix; process rules like `branch-naming`/`git-flow` and global/style rules
+suffix; process rules like `git-flow` and global/style rules
 like `caveman-style`/`code-style` go unsuffixed). Frontmatter
 contract — INLINE globs array, single line:
 
@@ -74,8 +74,8 @@ with `alwaysApply: true` but NO globs line yields a frontmatter-less mirror
 4. `## Red Flags` — observable symptoms reviewable in a diff.
 5. `## Evidence` — real file paths (relative to repo root) backing every claim.
 
-Domain rules follow all five parts. Process rules (`branch-naming`,
-`git-flow`) use a lighter intro + sections shape — do not retrofit Service
+Domain rules follow all five parts. Process rules (`git-flow`) use a lighter
+intro + sections shape — do not retrofit Service
 Context/Red Flags/Evidence onto them.
 
 ## Step 4 — Verification bar
@@ -103,5 +103,5 @@ post-steps: the `update-rules-skills-doc` skill.
 ## Reference implementations
 
 - Domain rule shape: `.ai/rules/endpoint-design-rules.md`, `.ai/rules/blog-content-rules.md`
-- Process rule shape: `.ai/rules/branch-naming.md`, `.ai/rules/git-flow.md`
+- Process rule shape: `.ai/rules/git-flow.md`
 - Sync/registration workflow: `.ai/skills/update-rules-skills-doc/SKILL.md`
