@@ -102,14 +102,14 @@ var backendDocumentsProject = builder.AddProject<Projects.snowcoreBlog_Backend_D
     .WaitFor(dbDocumentsEntitiesDb);
 
 // // Admin accounts, invitations and magic-link authentication (admin portal IAM).
-// var backendAdminsManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_AdminsManagement>("backend-adminsmanagement")
-//     .WaitFor(backendIamProject) // bootstrap CreateAdmin request targets the IAM queue
-//     .WithReference(cache)
-//     .WaitFor(cache)
-//     .WithReference(rabbitmq)
-//     .WaitFor(rabbitmq)
-//     .WithReference(dbAdminsEntitiesDb)
-//     .WaitFor(dbAdminsEntitiesDb);
+var backendAdminsManagementProject = builder.AddProject<Projects.snowcoreBlog_Backend_AdminsManagement>("backend-adminsmanagement")
+    .WaitFor(backendIamProject) // bootstrap CreateAdmin request targets the IAM queue
+    .WithReference(cache)
+    .WaitFor(cache)
+    .WithReference(rabbitmq)
+    .WaitFor(rabbitmq)
+    .WithReference(dbAdminsEntitiesDb)
+    .WaitFor(dbAdminsEntitiesDb);
 
 // var frontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_Frontend_Host>("frontend-apphost")
 //     .WaitFor(backendAuthorsManagementProject)
@@ -120,16 +120,16 @@ var backendDocumentsProject = builder.AddProject<Projects.snowcoreBlog_Backend_D
 
 // Admin portal (Blazor, FluentUI) operated by administrators over the same
 // backend services as the public frontend. Served by the ingress under /admin.
-// var adminFrontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_AdminFrontend>("admin-frontend-apphost")
-//     .WaitFor(backendAdminsManagementProject)
-//     .WaitFor(backendAuthorsManagementProject)
-//     .WaitFor(backendReadersManagementProject)
-//     .WaitFor(backendArticlesProject)
-//     .WaitFor(backendServiceNotificationsProject)
-//     .WaitFor(backendApiAccessRestrictionsProject)
-//     .WaitFor(backendDocumentsProject)
-//     .WithReference(cache)
-//     .WaitFor(cache);
+var adminFrontendAppHostProject = builder.AddProject<Projects.snowcoreBlog_AdminFrontend>("admin-frontend-apphost")
+    .WaitFor(backendAdminsManagementProject)
+    .WaitFor(backendAuthorsManagementProject)
+    .WaitFor(backendReadersManagementProject)
+    .WaitFor(backendArticlesProject)
+    .WaitFor(backendServiceNotificationsProject)
+    .WaitFor(backendApiAccessRestrictionsProject)
+    .WaitFor(backendDocumentsProject)
+    .WithReference(cache)
+    .WaitFor(cache);
 
 // builder.AddProject<Projects.snowcoreBlog_Console_App>("console-appdefault");
 
@@ -149,12 +149,12 @@ builder.AddYarp("ingress")
     .WaitFor(backendApiAccessRestrictionsProject)
     .WithReference(backendDocumentsProject)
     .WaitFor(backendDocumentsProject)
-    // .WithReference(backendAdminsManagementProject)
-    // .WaitFor(backendAdminsManagementProject)
+    .WithReference(backendAdminsManagementProject)
+    .WaitFor(backendAdminsManagementProject)
     // .WithReference(frontendAppHostProject)
     // .WaitFor(frontendAppHostProject)
-    // .WithReference(adminFrontendAppHostProject)
-    // .WaitFor(adminFrontendAppHostProject)
+    .WithReference(adminFrontendAppHostProject)
+    .WaitFor(adminFrontendAppHostProject)
     .WithReference(rabbitmq)
     .WaitFor(rabbitmq)
     .WithReference(cache)
